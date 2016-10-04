@@ -35,18 +35,25 @@ void parseXML( const std::string &_filename)
   std::string lineBuffer;
 
   while( !fileIn.eof() )
+  {
+    getline( fileIn, lineBuffer, '\n' );
+
+    if( lineBuffer.size() != 0 )
     {
-      getline( fileIn, lineBuffer, '\n' );
+      tokenizer tokens( lineBuffer, sep );
+//      tokenizer::iterator firstWord = tokens.begin();
 
-      if( lineBuffer.size() != 0 )
-        {
-          tokenizer tokens( lineBuffer, sep );
-          tokenizer::iterator firstWord = tokens.begin();
-          std::cout<< *firstWord<<"\n";
-          ++firstWord;
-        }
+      for(tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter)
+      {
+        std::cout<< *tok_iter;
+      }
+      std::cout<<"\n";
 
-    }
+
+      //++firstWord;
+     }
+
+  }
 
   fileIn.close();
 
