@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
   std::cout<<"time to parse some shit\n";
 
   parseXML( "data/map.osm" );
-
-
 }
 
 
