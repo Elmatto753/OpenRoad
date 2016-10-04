@@ -27,9 +27,11 @@ SOURCES += main.cpp
 
 OTHER_FILES += data/map.osm
 
-# adding SDL paths
-QMAKE_CXXFLAGS+=$$system(sdl2-config  --cflags)
-message(output from sdl2-config --cflags added to CXXFLAGS= $$QMAKE_CXXFLAGS)
+LIBS+= -framework OpenGL
 
-LIBS+=$$system(sdl2-config  --libs)
-message(output from sdl2-config --libs added to LIB=$$LIBS)
+# LIBRARY_PATHS specifies the additional library paths we'll need
+LIBRARY_PATHS = -L/usr/local/lib -I/opt/X11/lib
+
+LINKER_FLAGS = -framework OpenGL -lglfw3 -lglew
+
+

@@ -1,4 +1,6 @@
+#include <QtGui/QGuiApplication>
 #include <iostream>
+#include "GLwindow.h"
 #include <fstream>
 #include <string>
 #include <boost/tokenizer.hpp>
@@ -6,7 +8,16 @@
 #include <boost/format.hpp>
 #include <stdio.h>
 #include <stdlib.h>
-#include <GL/glew.h>
+
+/*int main(int argc, char **argv)
+{
+    QGuiApplication app(argc, argv);
+    GLWindow window;
+    window.resize(1024,720);
+    window.show();
+
+    return app.exec();
+}*/
 
 typedef boost::tokenizer<boost::char_separator<char> >tokenizer;
 
