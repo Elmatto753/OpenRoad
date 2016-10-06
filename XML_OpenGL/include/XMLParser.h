@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <string>
+#include "iostream"
 #include <boost/tokenizer.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>

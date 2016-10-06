@@ -1,7 +1,15 @@
 #include "GLwindow.h"
-#include <GL/glu.h>
+
+//again for normal people (havn't tested the ifdef on linux yet)
+//#include <GL/glu.h>
+//for mac
+#include <OpenGL/glu.h>
+
 #include <QKeyEvent>
 #include <QGuiApplication>
+#include "iostream"
+#include <stdio.h>
+#include <stdlib.h>
 
 GLWindow::GLWindow()
 {
@@ -28,7 +36,10 @@ void GLWindow::initializeGL()
 
     std::cout<<"time to parse some shit\n";
 
-    Parser.parseXML( "data/map.osm" );
+    //for crazy mac usage
+    Parser.parseXML( "/Users/edina/Documents/3rd year/Collab Research Project/OpenRoad/XML_OpenGL/data/map.osm" );
+    //for normal people
+    //Parser.parseXML("data/map.osm");
 }
 
 void GLWindow::resizeGL(int _w, int _h)
@@ -103,16 +114,36 @@ void GLWindow::keyPressEvent(QKeyEvent *_event)
 
 void GLWindow::drawNodes()
 {
+  float lonInterval = Parser.maxLon-Parser.minLon;
+  float latInterval = Parser.maxLat-Parser.minLat;
+  float multiplierLat;
+  float multiplierLon;
+
+  //working out how much to scale by
+  multiplierLat=100/latInterval;
+  multiplierLon=100/lonInterval;
+
+  glPointSize(2.0f);
+  glPushMatrix();
+  glTranslatef(0.0f,-50.0f,0.0f);
+  glBegin(GL_POINTS);
+      glColor3f(1.0,1.0,1.0);
+      //don't know why this doesn't work :o
+      glVertex3f(-50+((Parser.nodeLat[1]-Parser.minLat)*multiplierLat), 0.0, -50+((Parser.nodeLon[1]-Parser.minLon)*multiplierLon));
+  glEnd();
+  glPopMatrix();
+
   // Point test
-  for(int i=0; i<Parser.nodeRef; i++)
+  /*for(int i=0; i<Parser.nodeRef; i++)
   {
     glPointSize(2.0f);
     glPushMatrix();
     glTranslatef(0.0f,-50.0f,0.0f);
     glBegin(GL_POINTS);
         glColor3f(1.0,1.0,1.0);
-        glVertex3f(Parser.nodeLat.at(i) ,0.0,Parser.nodeLon.at(i));
+        glVertex3f(Parser.nodeLat[i], 0.0, Parser.nodeLon[i]);
+        //glVertex3f(Parser.nodeLat.at(i) ,0.0,Parser.nodeLon.at(i));
     glEnd();
     glPopMatrix();
-  }
+  }*/
 }
