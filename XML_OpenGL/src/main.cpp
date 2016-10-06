@@ -60,6 +60,7 @@ void parseXML( const std::string &_filename)
   int nodeRef = 0;
   std::vector<float> nodeLat;
   std::vector<float> nodeLon;
+  float minLat, minLon, maxLat, maxLon;
 
   while( !fileIn.eof() )
   {
@@ -73,8 +74,28 @@ void parseXML( const std::string &_filename)
       // Iterate through looking for nodes
       for(tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter)
       {
+        if( *tok_iter == "minlat" )
+        {
+          minLat = boost::lexical_cast<float>( *++tok_iter );
+        }
+
+        else if( *tok_iter == "maxlat" )
+        {
+          maxLat = boost::lexical_cast<float>( *++tok_iter );
+        }
+
+        else if( *tok_iter == "minlon" )
+        {
+          minLon = boost::lexical_cast<float>( *++tok_iter );
+        }
+
+        else if( *tok_iter == "maxlon" )
+        {
+          maxLon = boost::lexical_cast<float>( *++tok_iter );
+        }
+
         //std::cout<< *tok_iter;
-        if( *tok_iter == "lat" )
+        else if( *tok_iter == "lat" )
         {
           std::cout<<"lat="<<*++tok_iter<<" ";
           nodeLat.push_back(boost::lexical_cast<float>( *tok_iter ));
@@ -94,6 +115,8 @@ void parseXML( const std::string &_filename)
      }
 
   }
+
+  std::cout<<"minlat="<<minLat<<" minLon="<<minLon<<" maxlat="<<maxLat<<" maxLon="<<maxLon;
 
   // Close the file
   fileIn.close();
