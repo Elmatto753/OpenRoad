@@ -14,6 +14,8 @@ SOURCES+=$$PWD/src/main.cpp \
 
 HEADERS+=$$PWD/include/GLwindow.h
 
-LIBS+= -framework OpenGL
+macx:LIBS+= -framework OpenGL
+
+LIBS+= -lGLU
 
 OTHER_FILES += data/map.osm

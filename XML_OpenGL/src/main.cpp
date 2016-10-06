@@ -25,10 +25,18 @@ void parseXML( const std::string &_filename);
 
 int main(int argc, char *argv[])
 {
+  QGuiApplication app(argc, argv);
+  GLWindow window;
+  window.resize(1024,720);
+  window.show();
+
+
 
   std::cout<<"time to parse some shit\n";
 
   parseXML( "data/map.osm" );
+
+  return app.exec();
 }
 
 

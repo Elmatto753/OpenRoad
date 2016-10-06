@@ -1,5 +1,5 @@
 #include "GLwindow.h"
-#include <OpenGL/glu.h>
+#include <GL/glu.h>
 #include <QKeyEvent>
 #include <QGuiApplication>
 
