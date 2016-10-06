@@ -24,6 +24,11 @@ void GLWindow::initializeGL()
     glLoadIdentity();
     gluLookAt(0,0,100,0,0,0,0,1,0);
     startTimer(1);
+
+
+    std::cout<<"time to parse some shit\n";
+
+    Parser.parseXML( "data/map.osm" );
 }
 
 void GLWindow::resizeGL(int _w, int _h)
@@ -33,6 +38,7 @@ void GLWindow::resizeGL(int _w, int _h)
 
 void GLWindow::paintGL()
 {
+
     //lat long out of 100
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //right line
@@ -75,6 +81,9 @@ void GLWindow::paintGL()
         glVertex3f(50.0,0.0,0.0);
     glEnd();
     glPopMatrix();
+
+    drawNodes();
+
 }
 
 void GLWindow::timerEvent(QTimerEvent *)
@@ -90,4 +99,20 @@ void GLWindow::keyPressEvent(QKeyEvent *_event)
         case Qt::Key_W : glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
         case Qt::Key_S : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
     }
+}
+
+void GLWindow::drawNodes()
+{
+  // Point test
+  for(int i=0; i<Parser.nodeRef; i++)
+  {
+    glPointSize(2.0f);
+    glPushMatrix();
+    glTranslatef(0.0f,-50.0f,0.0f);
+    glBegin(GL_POINTS);
+        glColor3f(1.0,1.0,1.0);
+        glVertex3f(Parser.nodeLat.at(i) ,0.0,Parser.nodeLon.at(i));
+    glEnd();
+    glPopMatrix();
+  }
 }

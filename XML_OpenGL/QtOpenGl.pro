@@ -9,10 +9,13 @@ QT+= opengl core gui
 INCLUDEPATH+=./include \
             /usr/local/include
 
-SOURCES+=$$PWD/src/main.cpp \
-         $$PWD/src/GLwindow.cpp
 
-HEADERS+=$$PWD/include/GLwindow.h
+SOURCES+=$$PWD/src/main.cpp \
+         $$PWD/src/GLwindow.cpp \
+         $$PWD/src/XMLParser.cpp
+
+HEADERS+=$$PWD/include/GLwindow.h \
+         $$PWD/include/XMLParser.h
 
 macx:LIBS+= -framework OpenGL
 
