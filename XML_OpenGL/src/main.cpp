@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 
 void parseXML( const std::string &_filename)
 {
+  // Open XML file
   std::fstream fileIn;
   fileIn.open( _filename.c_str(), std::ios::in );
 
@@ -51,23 +52,42 @@ void parseXML( const std::string &_filename)
       exit( EXIT_FAILURE );
   }
 
-  boost::char_separator<char> sep( " " );
+  // Define what separates words
+  boost::char_separator<char> sep( " =\"" );
   std::string lineBuffer;
+
+  // Set up node referencing
+  int nodeRef = 0;
+  std::vector<float> nodeLat;
+  std::vector<float> nodeLon;
 
   while( !fileIn.eof() )
   {
+    // Get a line and turn it into tokens
     getline( fileIn, lineBuffer, '\n' );
 
     if( lineBuffer.size() != 0 )
     {
       tokenizer tokens( lineBuffer, sep );
-//      tokenizer::iterator firstWord = tokens.begin();
 
+      // Iterate through looking for nodes
       for(tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter)
       {
-        std::cout<< *tok_iter;
+        //std::cout<< *tok_iter;
+        if( *tok_iter == "lat" )
+        {
+          std::cout<<"lat="<<*++tok_iter<<" ";
+          nodeLat.push_back(boost::lexical_cast<float>( *tok_iter ));
+        }
+
+        else if( *tok_iter == "lon" )
+        {
+          std::cout<<"lon="<<*++tok_iter<<" ";
+          nodeLon.push_back(boost::lexical_cast<float>( *tok_iter ));
+          ++nodeRef;
+        }
       }
-      std::cout<<"\n";
+      //std::cout<<"\n";
 
 
       //++firstWord;
@@ -75,6 +95,7 @@ void parseXML( const std::string &_filename)
 
   }
 
+  // Close the file
   fileIn.close();
 
 }
