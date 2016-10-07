@@ -62,16 +62,25 @@ void XMLParse::parseXML( const std::string &_filename)
         //std::cout<< *tok_iter;
         else if( *tok_iter == "lat" )
         {
-          std::cout<<"lat="<<*++tok_iter<<" ";
-          nodeLat.push_back(boost::lexical_cast<float>( *tok_iter ));
+          std::cout<<"lat="<<*++tok_iter<<" ";          
+          currentNode.nodeLat=(boost::lexical_cast<float>( *tok_iter ));
         }
 
         else if( *tok_iter == "lon" )
         {
           std::cout<<"lon="<<*++tok_iter<<" ";
-          nodeLon.push_back(boost::lexical_cast<float>( *tok_iter ));
-          ++nodeRef;
+          currentNode.nodeLon=(boost::lexical_cast<float>( *tok_iter ));
+          currentNode.nodeRef=nodeRef;
+
+          //if all valid (e.g. not outliers) then push back node
+          if((currentNode.nodeLat>=minLat)&&(currentNode.nodeLat<=maxLat)&&
+             (currentNode.nodeLon>=minLon)&&(currentNode.nodeLon<=maxLon))
+          {
+              nodes.push_back(currentNode);
+              ++nodeRef;
+          }
         }
+
       }
       //std::cout<<"\n";
 

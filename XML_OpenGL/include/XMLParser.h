@@ -8,6 +8,16 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 
+//node data
+struct node
+{
+    int nodeRef;
+    float nodeLat;
+    float nodeLon;
+    //TBA
+    //float way;
+};
+
 class XMLParse
 {
 public :
@@ -20,12 +30,12 @@ public :
 
   void parseXML( const std::string &_filename);
 
+  std::vector<node> nodes;
+  node currentNode;
+
   // Set up node referencing
   int nodeRef = 0;
-  std::vector<float> nodeLat;
-  std::vector<float> nodeLon;
   float minLat, minLon, maxLat, maxLon;
-
 
 };
 

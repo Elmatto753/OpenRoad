@@ -116,43 +116,20 @@ void GLWindow::drawNodes()
 {
   float lonInterval = Parser.maxLon-Parser.minLon;
   float latInterval = Parser.maxLat-Parser.minLat;
-  float multiplierLat;
-  float multiplierLon;
-
-  //working out how much to scale by
-  multiplierLat=latInterval;
-  multiplierLon=lonInterval;
 
   glPointSize(2.0f);
   for(int i = 0; i<=Parser.nodeRef; i++)
   {
-    if((Parser.nodeLat[i]>=Parser.minLat)&&(Parser.nodeLat[i]<=Parser.maxLat)&&
-       (Parser.nodeLon[i]>=Parser.minLon)&&(Parser.nodeLon[i]<=Parser.maxLon))
     {
         glPushMatrix();
         glRotatef(90, 0.0, 0.0, 1.0);
         glTranslatef(-50.0f,-50.0f,0.0f);
         glBegin(GL_POINTS);
           glColor3f(1.0,1.0,1.0);
-          //
-          glVertex3f(((Parser.nodeLat[i]-Parser.minLat)/latInterval) * 100, ((Parser.nodeLon[i]-Parser.minLon)/lonInterval) * 100, 0.0f);
-          //glVertex3f(0.0, 0.0f, 0.0f)
+          //drawing nodes
+          glVertex3f(((Parser.nodes[i].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[i].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
         glEnd();
         glPopMatrix();
     }
   }
-
-  // Point test
-  /*for(int i=0; i<Parser.nodeRef; i++)
-  {
-    glPointSize(2.0f);
-    glPushMatrix();
-    glTranslatef(0.0f,-50.0f,0.0f);
-    glBegin(GL_POINTS);
-        glColor3f(1.0,1.0,1.0);
-        glVertex3f(Parser.nodeLat[i], 0.0, Parser.nodeLon[i]);
-        //glVertex3f(Parser.nodeLat.at(i) ,0.0,Parser.nodeLon.at(i));
-    glEnd();
-    glPopMatrix();
-  }*/
 }
