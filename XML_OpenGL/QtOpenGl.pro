@@ -22,4 +22,5 @@ macx:LIBS+= -framework OpenGL
 
 linux: LIBS+= -lGLU
 
-OTHER_FILES += data/map.osm
+OTHER_FILES += data/map.osm \
+               data/map_1.osm

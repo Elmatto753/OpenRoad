@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 {
   QGuiApplication app(argc, argv);
   GLWindow window;
-  window.resize(1024,720);
+  window.resize(720,720);
   window.show();
 
 
