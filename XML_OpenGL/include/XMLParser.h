@@ -12,6 +12,8 @@
 struct node
 {
     int nodeRef;
+    //uint32 is not enough, thus uint64
+    uint64_t nodeID;
     float nodeLat;
     float nodeLon;
     //TBA

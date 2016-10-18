@@ -58,6 +58,15 @@ void XMLParse::parseXML( const std::string &_filename)
         {
           maxLon = boost::lexical_cast<float>( *++tok_iter );
         }
+        else if( *tok_iter == "<node" )
+        {
+          //currentNode.nodeID = (boost::lexical_cast<uint64_t>( *tok_iter ));
+          std::stringstream ss;
+          ++tok_iter;
+          ss << *++tok_iter;
+          ss >> currentNode.nodeID;
+          std::cout<<"ID = "<< currentNode.nodeID;
+        }
 
         //std::cout<< *tok_iter;
         else if( *tok_iter == "lat" )
