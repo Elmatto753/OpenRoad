@@ -1,9 +1,10 @@
 #include "GLwindow.h"
 
-//again for normal people (havn't tested the ifdef on linux yet)
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
-//for mac
-//#include <OpenGL/glu.h>
+#endif
 
 #include <QKeyEvent>
 #include <QGuiApplication>
