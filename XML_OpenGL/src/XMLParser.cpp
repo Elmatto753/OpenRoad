@@ -39,7 +39,13 @@ void XMLParse::parseXML( const std::string &_filename)
       // Iterate through looking for nodes
       for(tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter)
       {
-        if( *tok_iter == "minlat" )
+        //define boundries
+        if( *tok_iter == "  " )
+        {
+          tok_iter++;
+        }
+
+        else if( *tok_iter == "minlat" )
         {
           minLat = boost::lexical_cast<float>( *++tok_iter );
         }
@@ -58,7 +64,10 @@ void XMLParse::parseXML( const std::string &_filename)
         {
           maxLon = boost::lexical_cast<float>( *++tok_iter );
         }
-        else if( *tok_iter == "<node" )
+        // look for this token to create node id, as id token is used elsewhere in the XML
+        // iterate tokens twice instead
+
+        else if( *tok_iter == "node" )
         {
           //currentNode.nodeID = (boost::lexical_cast<uint64_t>( *tok_iter ));
           std::stringstream ss;
@@ -66,12 +75,14 @@ void XMLParse::parseXML( const std::string &_filename)
           ss << *++tok_iter;
           ss >> currentNode.nodeID;
           std::cout<<"ID = "<< currentNode.nodeID;
+
         }
 
         //std::cout<< *tok_iter;
+        // Look for latitude and longitude values
         else if( *tok_iter == "lat" )
         {
-          std::cout<<"lat="<<*++tok_iter<<" ";          
+          std::cout<<"lat="<<*++tok_iter<<" ";
           currentNode.nodeLat=(boost::lexical_cast<float>( *tok_iter ));
         }
 
@@ -88,6 +99,52 @@ void XMLParse::parseXML( const std::string &_filename)
               nodes.push_back(currentNode);
               ++nodeRef;
           }
+        }
+
+        else if( *tok_iter == "<way" )
+        {
+          int count =0;
+
+          while( *tok_iter != "</way>" )
+          {
+
+            count++;
+            std::cout<<count<<" "<<*tok_iter<<std::endl;
+            ++tok_iter;
+            //Apparently boost doesn't like this
+            if( *tok_iter == "\n")
+            {
+              std::cout<<"it's an nd \n";
+
+            }
+
+            else if( *tok_iter == "id" )
+            {
+              std::stringstream ss;
+              ss << *++tok_iter;
+              ss >> currentWay.wayID;
+              std::cout<<"ID = "<<currentWay.wayID<<" ";
+            }
+
+            else if( *tok_iter == "ref" )
+            {
+              std::stringstream ss;
+              uint64_t temp;
+              ss << *++tok_iter;
+              ss >> temp;
+              currentWay.nodesInWay.push_back( temp );
+              // may have to check if node reference is in vector of nodes here
+            }
+            else if( *tok_iter == "name")
+            {
+              ++tok_iter;
+              currentWay.name = (boost::lexical_cast<char>( *++tok_iter ));
+            }
+          }
+
+          currentWay.wayRef = wayRef;
+          ways.push_back(currentWay);
+          wayRef++;
         }
 
       }

@@ -20,6 +20,15 @@ struct node
     //float way;
 };
 
+//way data
+struct way
+{
+  int wayRef;
+  uint64_t wayID;
+  std::vector<uint64_t> nodesInWay;
+  char name;
+};
+
 class XMLParse
 {
 public :
@@ -33,10 +42,13 @@ public :
   void parseXML( const std::string &_filename);
 
   std::vector<node> nodes;
+  std::vector<way> ways;
   node currentNode;
+  way currentWay;
 
   // Set up node referencing
   int nodeRef = 0;
+  int wayRef = 0;
   float minLat, minLon, maxLat, maxLon;
 
 };
