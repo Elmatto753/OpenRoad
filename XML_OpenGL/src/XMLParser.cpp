@@ -26,9 +26,11 @@ void XMLParse::parseXML( const std::string &_filename)
   // Define what separates words
   boost::char_separator<char> sep( " =\"" );
   std::string lineBuffer;
+  bool inWay = false;
 
   while( !fileIn.eof() )
   {
+
     // Get a line and turn it into tokens
     getline( fileIn, lineBuffer, '\n' );
 
@@ -74,7 +76,7 @@ void XMLParse::parseXML( const std::string &_filename)
           ++tok_iter;
           ss << *++tok_iter;
           ss >> currentNode.nodeID;
-          std::cout<<"ID = "<< currentNode.nodeID;
+          //std::cout<<"ID = "<< currentNode.nodeID;
 
         }
 
@@ -82,13 +84,15 @@ void XMLParse::parseXML( const std::string &_filename)
         // Look for latitude and longitude values
         else if( *tok_iter == "lat" )
         {
-          std::cout<<"lat="<<*++tok_iter<<" ";
+         // std::cout<<"lat="<<*++tok_iter<<" ";
+          ++tok_iter;
           currentNode.nodeLat=(boost::lexical_cast<float>( *tok_iter ));
         }
 
         else if( *tok_iter == "lon" )
         {
-          std::cout<<"lon="<<*++tok_iter<<" ";
+          ++tok_iter;
+         // std::cout<<"lon="<<*++tok_iter<<" ";
           currentNode.nodeLon=(boost::lexical_cast<float>( *tok_iter ));
           currentNode.nodeRef=nodeRef;
 
@@ -103,51 +107,50 @@ void XMLParse::parseXML( const std::string &_filename)
 
         else if( *tok_iter == "<way" )
         {
-          int count =0;
+          inWay = true;
+        }
 
-          while( *tok_iter != "</way>" )
-          {
 
-            count++;
-            std::cout<<count<<" "<<*tok_iter<<std::endl;
-            ++tok_iter;
-            //Apparently boost doesn't like this
-            if( *tok_iter == "\n")
-            {
-              std::cout<<"it's an nd \n";
 
-            }
 
-            else if( *tok_iter == "id" )
-            {
-              std::stringstream ss;
-              ss << *++tok_iter;
-              ss >> currentWay.wayID;
-              std::cout<<"ID = "<<currentWay.wayID<<" ";
-            }
 
-            else if( *tok_iter == "ref" )
-            {
-              std::stringstream ss;
-              uint64_t temp;
-              ss << *++tok_iter;
-              ss >> temp;
-              currentWay.nodesInWay.push_back( temp );
-              // may have to check if node reference is in vector of nodes here
-            }
-            else if( *tok_iter == "name")
-            {
-              ++tok_iter;
-              currentWay.name = (boost::lexical_cast<char>( *++tok_iter ));
-            }
-          }
+        else if( *tok_iter == "id" && inWay ==true )
+        {
+          std::stringstream ss;
+          ss << *++tok_iter;
+          ss >> currentWay.wayID;
+          std::cout<<"ID = "<<currentWay.wayID<<" ";
+        }
 
+        else if( *tok_iter == "ref" && inWay == true )
+        {
+          std::stringstream ss;
+          uint64_t temp;
+          ss << *++tok_iter;
+          ss >> temp;
+          currentWay.nodesInWay.push_back( temp );
+          // may have to check if node reference is in vector of nodes here
+        }
+        else if( *tok_iter == "name" && inWay == true )
+        {
+          ++tok_iter;
+          //currentWay.name = (boost::lexical_cast<char>( *++tok_iter ));
+        }
+
+        else if ( *tok_iter == "</way>" && inWay == true )
+        {
           currentWay.wayRef = wayRef;
           ways.push_back(currentWay);
           wayRef++;
+          std::cout<<"\n"<<"bing"<<"\n";
+          inWay = false;
         }
 
-      }
+
+
+        }
+
+
       //std::cout<<"\n";
 
 
@@ -155,6 +158,8 @@ void XMLParse::parseXML( const std::string &_filename)
      }
 
   }
+
+  std::cout<<"\n"<<wayRef<<"\n";
 
   std::cout<<"minlat="<<minLat<<" minLon="<<minLon<<" maxlat="<<maxLat<<" maxLon="<<maxLon;
 
