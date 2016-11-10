@@ -119,7 +119,7 @@ void GLWindow::drawNodes()
   float latInterval = Parser.maxLat-Parser.minLat;
 
   glPointSize(3.0f);
-  for(int i = 0; i<=Parser.nodeRef; i++)
+  for(uint i = 0; i<=Parser.nodeRef; i++)
   {
     {
         glPushMatrix();

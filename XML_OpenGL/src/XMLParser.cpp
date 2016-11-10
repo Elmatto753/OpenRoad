@@ -111,10 +111,6 @@ void XMLParse::parseXML( const std::string &_filename)
           inWay = true;
         }
 
-
-
-
-
         else if( *tok_iter == "id" && inWay ==true )
         {
           std::stringstream ss;

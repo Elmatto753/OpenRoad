@@ -47,8 +47,8 @@ public :
   way currentWay;
 
   // Set up node referencing
-  int nodeRef = 0;
-  int wayRef = 0;
+  uint nodeRef = 0;
+  uint wayRef = 0;
   float minLat, minLon, maxLat, maxLon;
 
 };
