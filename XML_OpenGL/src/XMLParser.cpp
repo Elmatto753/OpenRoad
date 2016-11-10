@@ -69,14 +69,14 @@ void XMLParse::parseXML( const std::string &_filename)
         // look for this token to create node id, as id token is used elsewhere in the XML
         // iterate tokens twice instead
 
-        else if( *tok_iter == "node" )
+        else if( *tok_iter == "<node" )
         {
           //currentNode.nodeID = (boost::lexical_cast<uint64_t>( *tok_iter ));
           std::stringstream ss;
           ++tok_iter;
           ss << *++tok_iter;
           ss >> currentNode.nodeID;
-          //std::cout<<"ID = "<< currentNode.nodeID;
+          std::cout<<"ID = "<< currentNode.nodeID<<"\n";
 
         }
 
@@ -102,6 +102,7 @@ void XMLParse::parseXML( const std::string &_filename)
           {
               nodes.push_back(currentNode);
               ++nodeRef;
+              std::cout<<"noderef = "<<nodeRef<<"\n";
           }
         }
 
@@ -119,7 +120,7 @@ void XMLParse::parseXML( const std::string &_filename)
           std::stringstream ss;
           ss << *++tok_iter;
           ss >> currentWay.wayID;
-          std::cout<<"ID = "<<currentWay.wayID<<" ";
+          //std::cout<<"ID = "<<currentWay.wayID<<" ";
         }
 
         else if( *tok_iter == "ref" && inWay == true )
@@ -132,6 +133,7 @@ void XMLParse::parseXML( const std::string &_filename)
           {
             if(nodes[i].nodeID == temp)
             {
+              //std::cout<<"i = "<<i<<"\n";
               currentWay.nodesInWay.push_back( i );
               break;
             }
@@ -151,20 +153,20 @@ void XMLParse::parseXML( const std::string &_filename)
           currentWay.wayRef = wayRef;
           ways.push_back(currentWay);
           wayRef++;
-          std::cout<<"\n"<<"bing"<<"\n";
+
           inWay = false;
         }
 
 
 
-        }
+      }
 
 
       //std::cout<<"\n";
 
 
       //++firstWord;
-     }
+    }
 
   }
 

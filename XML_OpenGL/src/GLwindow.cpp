@@ -118,37 +118,25 @@ void GLWindow::drawNodes()
   float lonInterval = Parser.maxLon-Parser.minLon;
   float latInterval = Parser.maxLat-Parser.minLat;
 
-  glPointSize(2.0f);
-//  for(int i = 0; i<=Parser.nodeRef; i++)
-//  {
-//    {
-//        glPushMatrix();
-//        glRotatef(90, 0.0, 0.0, 1.0);
-//        glTranslatef(-50.0f,-50.0f,0.0f);
-//        glBegin(GL_POINTS);
-//          glColor3f(1.0,1.0,1.0);
-//          //drawing nodes
-//          glVertex3f(((Parser.nodes[i].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[i].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
-//        glEnd();
-//        glPopMatrix();
-//    }
-//  }
-  for( uint i = 0; i<Parser.wayRef; i++)
+  glPointSize(3.0f);
+  for(int i = 0; i<=Parser.nodeRef; i++)
+  {
+    {
+        glPushMatrix();
+        glRotatef(90, 0.0, 0.0, 1.0);
+        glTranslatef(-50.0f,-50.0f,0.0f);
+        glBegin(GL_POINTS);
+          glColor3f(1.0,1.0,1.0);
+          //drawing nodes
+          glVertex3f(((Parser.nodes[i].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[i].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
+        glEnd();
+        glPopMatrix();
+    }
+  }
+  for( uint i = 0; i<Parser.ways.size(); i++)
   {
     for(uint j = 1; j<Parser.ways[i].nodesInWay.size(); j++)
     {
-      //std::cout<<"size = "<<Parser.ways[i].nodesInWay.size()<<"\n";
-//      for(uint k = 0; k<=Parser.nodeRef; k++)
-//      {
-
-//        if(Parser.nodes[k].nodeID == Parser.ways[i].nodesInWay[j])
-//        {
-//          toDraw.push_back(Parser.nodes[k]);
-
-//        }
-
-//      }
-
         glPushMatrix();
         glRotatef(90, 0.0, 0.0, 1.0);
         glTranslatef(-50.0f,-50.0f,0.0f);
@@ -163,6 +151,8 @@ void GLWindow::drawNodes()
 
         glEnd();
         glPopMatrix();
+
+        //std::cout<<((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100<<"\n";
 
     }
 
