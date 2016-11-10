@@ -128,7 +128,16 @@ void XMLParse::parseXML( const std::string &_filename)
           uint64_t temp;
           ss << *++tok_iter;
           ss >> temp;
-          currentWay.nodesInWay.push_back( temp );
+          for(uint i = 0; i <= nodeRef; i++)
+          {
+            if(nodes[i].nodeID == temp)
+            {
+              currentWay.nodesInWay.push_back( i );
+              break;
+            }
+
+          }
+
           // may have to check if node reference is in vector of nodes here
         }
         else if( *tok_iter == "name" && inWay == true )
