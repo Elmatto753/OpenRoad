@@ -35,6 +35,7 @@ void XMLParse::parseXML( const std::string &_filename)
 
     // Get a line and turn it into tokens
     getline( fileIn, lineBuffer, '\n' );
+    ++lineNum;
 
     if( lineBuffer.size() != 0 )
     {
