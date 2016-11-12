@@ -27,6 +27,8 @@ void XMLParse::parseXML( const std::string &_filename)
   boost::char_separator<char> sep( " =\"" );
   std::string lineBuffer;
   bool inWay = false;
+  uint lineNum = 0;
+  uint errLineNum = 0;
 
   while( !fileIn.eof() )
   {
@@ -108,6 +110,11 @@ void XMLParse::parseXML( const std::string &_filename)
 
         else if( *tok_iter == "<way" )
         {
+          if( inWay == true )
+          {
+            std::cerr<<"Warning: A way was opened without being closed. Unclosed way at line: "<<errLineNum<<"\n";
+          }
+          errLineNum = lineNum;
           inWay = true;
         }
 
