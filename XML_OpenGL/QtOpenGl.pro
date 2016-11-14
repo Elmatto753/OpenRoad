@@ -24,4 +24,5 @@ linux: LIBS+= -lGLU
 
 OTHER_FILES += data/map.osm \
                data/map_1.osm \
-               data/bigmap.osm
+               data/bigmap.osm \
+               data/biggermap.osm
