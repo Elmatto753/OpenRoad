@@ -29,4 +29,6 @@ OTHER_FILES += data/map.osm \
                data/NYmap.osm \
                data/SoL.osm \
                data/Venice.osm \
-               data/EastEnders.osm
+               data/EastEnders.osm \
+               data/EastEnders_2.osm \
+               data/crazy_0

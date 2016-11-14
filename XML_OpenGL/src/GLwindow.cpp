@@ -37,10 +37,8 @@ void GLWindow::initializeGL()
 
     std::cout<<"time to parse some shit\n";
 
-    //for crazy mac usage
-   // Parser.parseXML( "/Users/edina/Documents/3rd year/Collab Research Project/OpenRoad/XML_OpenGL/data/map.osm" );
-    //for normal people
-    Parser.parseXML("data/map.osm");
+    //NOTE LONDON INCLUDES UNDERGROUND INFO HENCE CRAZY LINES
+    Parser.parseXML("data/Venice.osm");
 }
 
 void GLWindow::resizeGL(int _w, int _h)
