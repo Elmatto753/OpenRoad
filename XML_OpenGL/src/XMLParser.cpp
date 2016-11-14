@@ -74,13 +74,12 @@ void XMLParse::parseXML( const std::string &_filename)
 
         else if( *tok_iter == "<node" )
         {
-          //currentNode.nodeID = (boost::lexical_cast<uint64_t>( *tok_iter ));
           std::stringstream ss;
-          ++tok_iter;
-          ss << *++tok_iter;
-          ss >> currentNode.nodeID;
-          std::cout<<"ID = "<< currentNode.nodeID<<"\n";
-
+          if( *++tok_iter == "id")
+          {
+            ss << *++tok_iter;
+            ss >> currentNode.nodeID;
+          }
         }
 
         //std::cout<< *tok_iter;
@@ -95,18 +94,18 @@ void XMLParse::parseXML( const std::string &_filename)
         else if( *tok_iter == "lon" )
         {
           ++tok_iter;
-         // std::cout<<"lon="<<*++tok_iter<<" ";
+
           currentNode.nodeLon=(boost::lexical_cast<float>( *tok_iter ));
           currentNode.nodeRef=nodeRef;
 
           //if all valid (e.g. not outliers) then push back node
-          if((currentNode.nodeLat>=minLat)&&(currentNode.nodeLat<=maxLat)&&
-             (currentNode.nodeLon>=minLon)&&(currentNode.nodeLon<=maxLon))
-          {
+//          if((currentNode.nodeLat>=minLat)&&(currentNode.nodeLat<=maxLat)&&
+//             (currentNode.nodeLon>=minLon)&&(currentNode.nodeLon<=maxLon))
+//          {
+
               nodes.push_back(currentNode);
               ++nodeRef;
-              std::cout<<"noderef = "<<nodeRef<<"\n";
-          }
+//          }
         }
 
         else if( *tok_iter == "<way" )
@@ -149,16 +148,22 @@ void XMLParse::parseXML( const std::string &_filename)
         else if( *tok_iter == "name" && inWay == true )
         {
           ++tok_iter;
-          //currentWay.name = (boost::lexical_cast<char>( *++tok_iter ));
+          std::stringstream ss;
+          while( *++tok_iter != "/>" )
+          {
+            ss << *tok_iter;
+          }
+          ss >> currentWay.name;
+          std::cout<< currentWay.name;
         }
 
         else if ( *tok_iter == "</way>" && inWay == true )
         {
+          inWay = false;
           currentWay.wayRef = wayRef;
           ways.push_back(currentWay);
+          currentWay.nodesInWay.clear();
           wayRef++;
-
-          inWay = false;
         }
 
 

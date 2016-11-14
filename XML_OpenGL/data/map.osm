@@ -2627,7 +2627,9 @@
  <node id="3954357360" visible="true" version="1" changeset="36669797" timestamp="2016-01-18T22:44:33Z" user="SomePlaceMapperCT" uid="445666" lat="50.7494493" lon="-1.9164140"/>
  <node id="3954357361" visible="true" version="1" changeset="36669797" timestamp="2016-01-18T22:44:33Z" user="SomePlaceMapperCT" uid="445666" lat="50.7495013" lon="-1.9161846"/>
  <node id="3954357362" visible="true" version="1" changeset="36669797" timestamp="2016-01-18T22:44:33Z" user="SomePlaceMapperCT" uid="445666" lat="50.7495121" lon="-1.9162839"/>
- <way id="4079662" visible="true" version="7" changeset="23258593" timestamp="2014-06-28T20:42:18Z" user="SomePlaceMapperCT" uid="445666"> <nd ref="1629494279"/>  <nd ref="626948364"/>
+ <way id="4079662" visible="true" version="7" changeset="23258593" timestamp="2014-06-28T20:42:18Z" user="SomePlaceMapperCT" uid="445666">
+  <nd ref="1629494279"/>
+  <nd ref="626948364"/>
   <nd ref="626948366"/>
   <nd ref="626948367"/>
   <nd ref="21640798"/>

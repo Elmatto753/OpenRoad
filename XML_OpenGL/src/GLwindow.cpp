@@ -40,7 +40,7 @@ void GLWindow::initializeGL()
     //for crazy mac usage
    // Parser.parseXML( "/Users/edina/Documents/3rd year/Collab Research Project/OpenRoad/XML_OpenGL/data/map.osm" );
     //for normal people
-    Parser.parseXML("data/map.osm");
+    Parser.parseXML("data/map_1.osm");
 }
 
 void GLWindow::resizeGL(int _w, int _h)
@@ -122,35 +122,40 @@ void GLWindow::drawNodes()
   for(uint i = 0; i<=Parser.nodeRef; i++)
   {
     {
-        glPushMatrix();
-        glRotatef(90, 0.0, 0.0, 1.0);
-        glTranslatef(-50.0f,-50.0f,0.0f);
-        glBegin(GL_POINTS);
-          glColor3f(1.0,1.0,1.0);
-          //drawing nodes
-          glVertex3f(((Parser.nodes[i].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[i].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
-        glEnd();
-        glPopMatrix();
+//        glPushMatrix();
+//        glRotatef(90, 0.0, 0.0, 1.0);
+//        glTranslatef(-50.0f,-50.0f,0.0f);
+//        glBegin(GL_POINTS);
+//          glColor3f(1.0,1.0,1.0);
+//          //drawing nodes
+//          glVertex3f(((Parser.nodes[i].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[i].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
+//        glEnd();
+//        glPopMatrix();
     }
   }
   for( uint i = 0; i<Parser.ways.size(); i++)
   {
     for(uint j = 1; j<Parser.ways[i].nodesInWay.size(); j++)
     {
+      //if all valid (e.g. not outliers) then push back node - NEED TO DO THIS STEP ON OUTPUT ie. WHEN POPULATING OBJ FILE
+      if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat<=Parser.maxLat)&&
+         (Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon<=Parser.maxLon))
+      {
         glPushMatrix();
-        glRotatef(90, 0.0, 0.0, 1.0);
-        glTranslatef(-50.0f,-50.0f,0.0f);
-        glBegin(GL_LINES);
-        glColor3f(1.0,1.0,1.0);
-        //drawing ways
+          glRotatef(90.0, 0.0, 0.0, 1.0);
+          glTranslatef(-50.0f,-50.0f,0.0f);
+          glBegin(GL_LINES);
+            glColor3f(1.0,1.0,1.0);
+            //drawing ways
+            glVertex3f(((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
 
-          glVertex3f(((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
-
-          glVertex3f(((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
+            glVertex3f(((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
 
 
-        glEnd();
+          glEnd();
         glPopMatrix();
+      }
+
 
         //std::cout<<((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100<<"\n";
 

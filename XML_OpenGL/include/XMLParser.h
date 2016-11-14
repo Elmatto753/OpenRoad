@@ -26,7 +26,7 @@ struct way
   int wayRef;
   uint64_t wayID;
   std::vector<uint64_t> nodesInWay;
-  char name;
+  std::string name;
 };
 
 class XMLParse
