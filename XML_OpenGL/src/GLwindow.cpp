@@ -40,7 +40,7 @@ void GLWindow::initializeGL()
     //for crazy mac usage
    // Parser.parseXML( "/Users/edina/Documents/3rd year/Collab Research Project/OpenRoad/XML_OpenGL/data/map.osm" );
     //for normal people
-    Parser.parseXML("data/biggermap.osm");
+    Parser.parseXML("data/map.osm");
 }
 
 void GLWindow::resizeGL(int _w, int _h)
