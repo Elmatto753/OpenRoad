@@ -33,7 +33,7 @@ OTHER_FILES += data/map.osm \
                data/EastEnders_2.osm \
                data/crazy_0 \
                data/NY \
-               data/sydney \
+               data/sydney_0 \
                data/HK \
                data/cardiff \
                data/Philland
