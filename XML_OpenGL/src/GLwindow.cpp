@@ -38,7 +38,7 @@ void GLWindow::initializeGL()
     std::cout<<"time to parse some shit\n";
 
     //NOTE LONDON INCLUDES UNDERGROUND INFO HENCE CRAZY LINES
-    Parser.parseXML("data/cardiff");
+    Parser.parseXML("data/Philland");
 }
 
 void GLWindow::resizeGL(int _w, int _h)

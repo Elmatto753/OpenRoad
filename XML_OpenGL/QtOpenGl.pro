@@ -35,4 +35,5 @@ OTHER_FILES += data/map.osm \
                data/NY \
                data/sydney \
                data/HK \
-               data/cardiff
+               data/cardiff \
+               data/Philland

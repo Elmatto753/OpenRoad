@@ -147,14 +147,18 @@ void XMLParse::parseXML( const std::string &_filename)
         }
         else if( *tok_iter == "name" && inWay == true )
         {
-          ++tok_iter;
+          //std::cout<<"line = "<<lineNum<<"\n";
+          //++tok_iter;
           std::stringstream ss;
           while( *++tok_iter != "/>" )
           {
-            ss << *tok_iter;
+            if(*tok_iter != "v")
+            {
+              ss << *tok_iter;
+            }
           }
           ss >> currentWay.name;
-          std::cout<< currentWay.name;
+          //std::cout<< currentWay.name;
         }
 
         else if ( *tok_iter == "</way>" && inWay == true )
