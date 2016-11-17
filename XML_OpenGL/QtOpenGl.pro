@@ -36,4 +36,9 @@ OTHER_FILES += data/map.osm \
                data/sydney_0 \
                data/HK \
                data/cardiff \
-               data/Philland
+               data/Philland \
+               UI/interface.ui
+
+DISTFILES += \
+    UI/InterfaceForm.ui.qml \
+    UI/Interface.qml

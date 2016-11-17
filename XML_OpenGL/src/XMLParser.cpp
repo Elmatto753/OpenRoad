@@ -27,6 +27,7 @@ void XMLParse::parseXML( const std::string &_filename)
   boost::char_separator<char> sep( " =\"" );
   std::string lineBuffer;
   bool inWay = false;
+  bool storeWay = false;
   uint lineNum = 0;
   uint errLineNum = 0;
 
@@ -82,11 +83,11 @@ void XMLParse::parseXML( const std::string &_filename)
           }
         }
 
-        //std::cout<< *tok_iter;
+
         // Look for latitude and longitude values
         else if( *tok_iter == "lat" )
         {
-         // std::cout<<"lat="<<*++tok_iter<<" ";
+
           ++tok_iter;
           currentNode.nodeLat=(boost::lexical_cast<float>( *tok_iter ));
         }
@@ -123,7 +124,6 @@ void XMLParse::parseXML( const std::string &_filename)
           std::stringstream ss;
           ss << *++tok_iter;
           ss >> currentWay.wayID;
-          //std::cout<<"ID = "<<currentWay.wayID<<" ";
         }
 
         else if( *tok_iter == "ref" && inWay == true )
@@ -145,10 +145,9 @@ void XMLParse::parseXML( const std::string &_filename)
 
           // may have to check if node reference is in vector of nodes here
         }
+
         else if( *tok_iter == "name" && inWay == true )
         {
-          //std::cout<<"line = "<<lineNum<<"\n";
-          //++tok_iter;
           std::stringstream ss;
           while( *++tok_iter != "/>" )
           {
@@ -161,19 +160,27 @@ void XMLParse::parseXML( const std::string &_filename)
           //std::cout<< currentWay.name;
         }
 
+        else if ( *tok_iter == "highway")
+        {
+          storeWay = true;
+        }
+
         else if ( *tok_iter == "</way>" && inWay == true )
         {
           inWay = false;
-          currentWay.wayRef = wayRef;
-          ways.push_back(currentWay);
+          if( storeWay == true)
+          {
+            currentWay.wayRef = wayRef;
+            ways.push_back(currentWay);
+
+            wayRef++;
+          }
           currentWay.nodesInWay.clear();
-          wayRef++;
+          storeWay = false;
+
         }
 
-
-
       }
-
 
       //std::cout<<"\n";
 
