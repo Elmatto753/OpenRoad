@@ -26,7 +26,7 @@ GLWindow::~GLWindow()
 
 void GLWindow::test(bool)
 {
-  Parser.parseXML("data/map.osm");
+  Parser.parseXML("data/crazy_0");
 }
 
 void GLWindow::initializeGL()

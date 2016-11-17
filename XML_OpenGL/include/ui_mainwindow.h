@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.0
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -46,12 +46,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1020, 756);
+        MainWindow->resize(1190, 756);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         SceneLayout = new QWidget(centralWidget);
         SceneLayout->setObjectName(QStringLiteral("SceneLayout"));
-        SceneLayout->setGeometry(QRect(0, 0, 720, 720));
+        SceneLayout->setGeometry(QRect(0, -1, 991, 721));
         m_scene = new QGridLayout(SceneLayout);
         m_scene->setSpacing(6);
         m_scene->setContentsMargins(11, 11, 11, 11);
@@ -62,7 +62,7 @@ public:
 
         ButtonLayout = new QWidget(centralWidget);
         ButtonLayout->setObjectName(QStringLiteral("ButtonLayout"));
-        ButtonLayout->setGeometry(QRect(720, 0, 300, 720));
+        ButtonLayout->setGeometry(QRect(980, 0, 211, 720));
         m_buttons = new QGridLayout(ButtonLayout);
         m_buttons->setSpacing(6);
         m_buttons->setContentsMargins(11, 11, 11, 11);
@@ -85,7 +85,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1020, 19));
+        menuBar->setGeometry(QRect(0, 0, 1190, 22));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
