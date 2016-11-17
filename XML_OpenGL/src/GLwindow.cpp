@@ -12,15 +12,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-GLWindow::GLWindow()
+GLWindow::GLWindow(QWidget *_parent) :
+  QOpenGLWidget(_parent)
 {
-    setTitle("Simple GL Window");
+//    setTitle("Simple GL Window");
     m_y=0.0f;
 }
 
 GLWindow::~GLWindow()
 {
 
+}
+
+void GLWindow::test(bool)
+{
+  Parser.parseXML("data/map.osm");
 }
 
 void GLWindow::initializeGL()
@@ -40,12 +46,17 @@ void GLWindow::initializeGL()
     //NOTE LONDON INCLUDES UNDERGROUND INFO HENCE CRAZY LINES
     // OR IT MIGHT BE FLIGHT PATHS WE JUST DON'T KNOW
     // THIS MYSTERY RUNS DEEP
-    Parser.parseXML("data/map.osm");
+//    Parser.parseXML("data/NY");
 }
 
 void GLWindow::resizeGL(int _w, int _h)
 {
     glViewport(0,0,_w,_h);
+}
+
+void GLWindow::slider(int _s)
+{
+  std::cout << _s << "\n";
 }
 
 void GLWindow::paintGL()

@@ -11,10 +11,16 @@ INCLUDEPATH+=./include \
 
 SOURCES+=$$PWD/src/main.cpp \
          $$PWD/src/GLwindow.cpp \
-         $$PWD/src/XMLParser.cpp
+         $$PWD/src/XMLParser.cpp \
+         $$PWD/src/mainwindow.cpp
 
 HEADERS+=$$PWD/include/GLwindow.h \
-         $$PWD/include/XMLParser.h
+         $$PWD/include/XMLParser.h \
+         $$PWD/include/mainwindow.h
+
+FORMS    += $$PWD/UI/mainwindow.ui
+UI_DIR = $$PWD/include
+UI_HEADERS_DIR = $$PWD/include
 
 DESTDIR=./
 
@@ -36,9 +42,4 @@ OTHER_FILES += data/map.osm \
                data/sydney_0 \
                data/HK \
                data/cardiff \
-               data/Philland \
-               UI/interface.ui
-
-DISTFILES += \
-    UI/InterfaceForm.ui.qml \
-    UI/Interface.qml
+               data/Philland
