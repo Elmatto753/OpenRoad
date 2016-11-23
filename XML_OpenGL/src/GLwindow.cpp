@@ -26,7 +26,7 @@ GLWindow::~GLWindow()
 
 void GLWindow::test(bool)
 {
-  Parser.parseXML("data/crazy_0");
+  Parser.parseXML("data/map_1.osm");
 }
 
 void GLWindow::initializeGL()
@@ -46,6 +46,7 @@ void GLWindow::initializeGL()
     //NOTE LONDON INCLUDES UNDERGROUND INFO HENCE CRAZY LINES
     // OR IT MIGHT BE FLIGHT PATHS WE JUST DON'T KNOW
     // THIS MYSTERY RUNS DEEP
+    // INDEED IT DOES
 //    Parser.parseXML("data/NY");
 }
 
@@ -112,16 +113,6 @@ void GLWindow::paintGL()
 void GLWindow::timerEvent(QTimerEvent *)
 {
     update();
-}
-
-void GLWindow::keyPressEvent(QKeyEvent *_event)
-{
-    switch(_event->key())
-    {
-        case Qt::Key_Escape : QGuiApplication::exit(0); break;
-        case Qt::Key_W : glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
-        case Qt::Key_S : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
-    }
 }
 
 void GLWindow::drawNodes()

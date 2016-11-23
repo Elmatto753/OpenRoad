@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QKeyEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -19,4 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
   delete ui;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *_event)
+{
+    switch(_event->key())
+    {
+        case Qt::Key_Escape : QGuiApplication::exit(0); break;
+        case Qt::Key_W : glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
+        case Qt::Key_S : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
+    }
 }

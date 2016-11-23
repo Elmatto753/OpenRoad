@@ -12,12 +12,9 @@
 struct node
 {
     int nodeRef;
-    //uint32 is not enough, thus uint64
     uint64_t nodeID;
     float nodeLat;
     float nodeLon;
-    //TBA
-    //float way;
 };
 
 //way data
@@ -25,6 +22,7 @@ struct way
 {
   int wayRef;
   uint64_t wayID;
+  //storing all the node reference that are inside the way
   std::vector<uint64_t> nodesInWay;
   std::string name;
 };

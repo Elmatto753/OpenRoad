@@ -21,16 +21,12 @@
 
 //void parseXML( const std::string &_filename);
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
 //  QGuiApplication app(argc, argv);
 //  GLWindow window;
 //  window.resize(720,720);
 //  window.show();
-
-
-
-
 //  return app.exec();
 
   QApplication a(argc, argv);

@@ -24,7 +24,6 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
   private:
     float m_y;
     void timerEvent(QTimerEvent *);
-    void keyPressEvent(QKeyEvent *_event);
     XMLParse Parser;
 };
 

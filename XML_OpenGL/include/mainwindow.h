@@ -19,6 +19,7 @@ public:
 private:
   Ui::MainWindow *ui;
   GLWindow *m_gl;
+  void keyPressEvent(QKeyEvent *_event);
 
 public slots:
   void receiverthingy(int _s, std::string _ss) { std::cout << _s << ": " << _ss << "\n"; }
