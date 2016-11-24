@@ -19,6 +19,7 @@ public:
 private:
   Ui::MainWindow *ui;
   GLWindow *m_gl;
+  QString *m_fileName;
   void keyPressEvent(QKeyEvent *_event);
 
 public slots:

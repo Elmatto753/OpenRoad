@@ -26,7 +26,20 @@ GLWindow::~GLWindow()
 
 void GLWindow::test(bool)
 {
-  Parser.parseXML("data/map_1.osm");
+  Parser.parseXML("data/map.osm");
+}
+
+QString GLWindow::openFileBrowser(bool)
+{
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                  "/home",
+                                                  tr("OpenStreetMap()"));
+  if(fileName != nullptr)
+  {
+    Parser.parseXML(fileName.toStdString());
+  }
+
+  return fileName;
 }
 
 void GLWindow::initializeGL()

@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
   m_gl = new GLWindow(this);
 
   ui->m_scene->addWidget(m_gl, 0, 0, 1, 1);
-  connect(ui->m_clickme, SIGNAL(clicked(bool)), m_gl, SLOT(test(bool)));
+//  connect(ui->m_Parse, SIGNAL(clicked(bool)), m_gl, SLOT(test(bool)));
+  connect(ui->m_FileBrowse, SIGNAL(clicked(bool)), m_gl, SLOT(openFileBrowser(bool)));
   connect(ui->m_slider, SIGNAL(sliderMoved(int)), m_gl, SLOT(slider(int)));
   connect(this, SIGNAL(imasignal(int, std::string)), this, SLOT(receiverthingy(int, std::string)));
 

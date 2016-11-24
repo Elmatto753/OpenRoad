@@ -3,6 +3,7 @@
 
 #include <QOpenGLWindow>
 #include <QOpenGLWidget>
+#include <QFileDialog>
 #include <iostream>
 #include "XMLParser.h"
 
@@ -18,13 +19,16 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
     void drawNodes();
 
   public slots:
-    void test(bool _s);
+    void test(bool);
     void slider(int);
+
+    QString openFileBrowser(bool);
 
   private:
     float m_y;
     void timerEvent(QTimerEvent *);
     XMLParse Parser;
+    QString fileName;
 };
 
 #endif

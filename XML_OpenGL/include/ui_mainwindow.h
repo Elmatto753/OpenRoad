@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -35,9 +35,9 @@ public:
     QSpacerItem *horizontalSpacer;
     QWidget *ButtonLayout;
     QGridLayout *m_buttons;
-    QPushButton *m_clickme;
     QSpacerItem *verticalSpacer;
     QSlider *m_slider;
+    QPushButton *m_FileBrowse;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -67,25 +67,25 @@ public:
         m_buttons->setSpacing(6);
         m_buttons->setContentsMargins(11, 11, 11, 11);
         m_buttons->setObjectName(QStringLiteral("m_buttons"));
-        m_clickme = new QPushButton(ButtonLayout);
-        m_clickme->setObjectName(QStringLiteral("m_clickme"));
-
-        m_buttons->addWidget(m_clickme, 0, 0, 1, 1);
-
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        m_buttons->addItem(verticalSpacer, 2, 0, 1, 1);
+        m_buttons->addItem(verticalSpacer, 3, 0, 1, 1);
 
         m_slider = new QSlider(ButtonLayout);
         m_slider->setObjectName(QStringLiteral("m_slider"));
         m_slider->setOrientation(Qt::Horizontal);
 
-        m_buttons->addWidget(m_slider, 1, 0, 1, 1);
+        m_buttons->addWidget(m_slider, 2, 0, 1, 1);
+
+        m_FileBrowse = new QPushButton(ButtonLayout);
+        m_FileBrowse->setObjectName(QStringLiteral("m_FileBrowse"));
+
+        m_buttons->addWidget(m_FileBrowse, 0, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1190, 22));
+        menuBar->setGeometry(QRect(0, 0, 1190, 19));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -102,7 +102,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        m_clickme->setText(QApplication::translate("MainWindow", "Clicka me", 0));
+        m_FileBrowse->setText(QApplication::translate("MainWindow", "Open File", 0));
     } // retranslateUi
 
 };
