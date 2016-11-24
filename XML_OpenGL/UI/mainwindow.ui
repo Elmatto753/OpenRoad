@@ -49,7 +49,7 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="m_buttons">
-     <item row="3" column="0">
+     <item row="4" column="0">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -62,7 +62,7 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QSlider" name="m_slider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -73,6 +73,13 @@
       <widget class="QPushButton" name="m_FileBrowse">
        <property name="text">
         <string>Open File</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="m_output">
+       <property name="text">
+        <string>Output to OBJ</string>
        </property>
       </widget>
      </item>

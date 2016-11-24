@@ -38,6 +38,7 @@ public:
     QSpacerItem *verticalSpacer;
     QSlider *m_slider;
     QPushButton *m_FileBrowse;
+    QPushButton *m_output;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -69,18 +70,23 @@ public:
         m_buttons->setObjectName(QStringLiteral("m_buttons"));
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        m_buttons->addItem(verticalSpacer, 3, 0, 1, 1);
+        m_buttons->addItem(verticalSpacer, 4, 0, 1, 1);
 
         m_slider = new QSlider(ButtonLayout);
         m_slider->setObjectName(QStringLiteral("m_slider"));
         m_slider->setOrientation(Qt::Horizontal);
 
-        m_buttons->addWidget(m_slider, 2, 0, 1, 1);
+        m_buttons->addWidget(m_slider, 3, 0, 1, 1);
 
         m_FileBrowse = new QPushButton(ButtonLayout);
         m_FileBrowse->setObjectName(QStringLiteral("m_FileBrowse"));
 
         m_buttons->addWidget(m_FileBrowse, 0, 0, 1, 1);
+
+        m_output = new QPushButton(ButtonLayout);
+        m_output->setObjectName(QStringLiteral("m_output"));
+
+        m_buttons->addWidget(m_output, 2, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -103,6 +109,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         m_FileBrowse->setText(QApplication::translate("MainWindow", "Open File", 0));
+        m_output->setText(QApplication::translate("MainWindow", "Output to OBJ", 0));
     } // retranslateUi
 
 };

@@ -12,11 +12,13 @@ INCLUDEPATH+=./include \
 SOURCES+=$$PWD/src/main.cpp \
          $$PWD/src/GLwindow.cpp \
          $$PWD/src/XMLParser.cpp \
-         $$PWD/src/mainwindow.cpp
+         $$PWD/src/mainwindow.cpp \
+         $$PWD/src/OBJWrite.cpp
 
 HEADERS+=$$PWD/include/GLwindow.h \
          $$PWD/include/XMLParser.h \
-         $$PWD/include/mainwindow.h
+         $$PWD/include/mainwindow.h \
+         $$PWD/include/OBJWrite.h
 
 FORMS    += $$PWD/UI/mainwindow.ui
 UI_DIR = $$PWD/include

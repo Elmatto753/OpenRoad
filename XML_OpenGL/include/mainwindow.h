@@ -22,6 +22,7 @@ private:
   QString *m_fileName;
   void keyPressEvent(QKeyEvent *_event);
 
+
 public slots:
   void receiverthingy(int _s, std::string _ss) { std::cout << _s << ": " << _ss << "\n"; }
 

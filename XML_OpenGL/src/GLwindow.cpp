@@ -42,6 +42,38 @@ QString GLWindow::openFileBrowser(bool)
   return fileName;
 }
 
+void GLWindow::outputToOBJ(bool)
+{
+  lonInterval = Parser.maxLon-Parser.minLon;
+  latInterval = Parser.maxLat-Parser.minLat;
+
+  for( uint i = 0; i<Parser.ways.size(); i++)
+  {
+    for(uint j = 1; j<Parser.ways[i].nodesInWay.size(); j++)
+    {
+      //if all valid (e.g. not outliers) then push back node - NEED TO DO THIS STEP ON OUTPUT ie. WHEN POPULATING OBJ FILE
+      if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat<=Parser.maxLat)&&
+         (Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon<=Parser.maxLon))
+      {
+        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100;
+
+        // Test output to file
+        std::stringstream ss;
+        ss << "v " + (std::to_string(X0) + " " + std::to_string(Y0) + " 0.0\n");
+        toOBJ = ss.str();
+        Writer.writeToOBJ(toOBJ);
+        toOBJ.clear();
+
+      }
+
+    }
+
+  }
+}
+
 void GLWindow::initializeGL()
 {
     glClearColor(0.6,  0.6, 0.6, 1.0);
@@ -130,8 +162,8 @@ void GLWindow::timerEvent(QTimerEvent *)
 
 void GLWindow::drawNodes()
 {
-  float lonInterval = Parser.maxLon-Parser.minLon;
-  float latInterval = Parser.maxLat-Parser.minLat;
+  lonInterval = Parser.maxLon-Parser.minLon;
+  latInterval = Parser.maxLat-Parser.minLat;
 
   glPointSize(3.0f);
   for(uint i = 0; i<=Parser.nodeRef; i++)
@@ -156,19 +188,25 @@ void GLWindow::drawNodes()
       if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat<=Parser.maxLat)&&
          (Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon<=Parser.maxLon))
       {
+        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100;
+
         glPushMatrix();
           glRotatef(90.0, 0.0, 0.0, 1.0);
           glTranslatef(-50.0f,-50.0f,0.0f);
           glBegin(GL_LINES);
             glColor3f(1.0,1.0,1.0);
             //drawing ways
-            glVertex3f(((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
+            glVertex3f(X0, Y0, 0.0f);
 
-            glVertex3f(((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100, ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100, 0.0f);
+            glVertex3f(X1, Y1, 0.0f);
 
 
           glEnd();
         glPopMatrix();
+
       }
 
 

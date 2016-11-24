@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <iostream>
 #include "XMLParser.h"
+#include "OBJWrite.h"
 
 class GLWindow : public QOpenGLWidget//public QOpenGLWindow
 {
@@ -21,14 +22,20 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
   public slots:
     void test(bool);
     void slider(int);
-
+    void outputToOBJ(bool);
     QString openFileBrowser(bool);
 
   private:
     float m_y;
     void timerEvent(QTimerEvent *);
     XMLParse Parser;
+    OBJWrite Writer;
     QString fileName;
+    bool OBJwritten = false;
+    float lonInterval = Parser.maxLon-Parser.minLon;
+    float latInterval = Parser.maxLat-Parser.minLat;
+    float X0, X1, Y0, Y1;
+    std::string toOBJ;
 };
 
 #endif
