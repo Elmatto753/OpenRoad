@@ -36,6 +36,8 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
     float latInterval = Parser.maxLat-Parser.minLat;
     float X0, X1, Y0, Y1, Xtop0, Ytop0, Xbot0, Ybot0;
     std::string toOBJ;
+    float roadWidth;
+    int verticeCount;
 };
 
 #endif

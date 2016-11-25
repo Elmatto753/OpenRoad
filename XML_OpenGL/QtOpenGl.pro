@@ -45,4 +45,4 @@ OTHER_FILES += data/map.osm \
                data/HK \
                data/cardiff \
                data/Philland \
-               data/test.osm
+               data/singleRoad_2.osm
