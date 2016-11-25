@@ -34,7 +34,7 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
     bool OBJwritten = false;
     float lonInterval = Parser.maxLon-Parser.minLon;
     float latInterval = Parser.maxLat-Parser.minLat;
-    float X0, X1, Y0, Y1;
+    float X0, X1, Y0, Y1, Xtop0, Ytop0, Xbot0, Ybot0;
     std::string toOBJ;
 };
 

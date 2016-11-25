@@ -44,4 +44,5 @@ OTHER_FILES += data/map.osm \
                data/sydney_0 \
                data/HK \
                data/cardiff \
-               data/Philland
+               data/Philland \
+               data/test.osm

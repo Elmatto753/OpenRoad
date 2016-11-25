@@ -60,18 +60,72 @@ void GLWindow::outputToOBJ(bool)
         X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100;
         Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100;
 
-        // Test output to file
-        std::stringstream ss;
-        ss << "v " + (std::to_string(X0) + " " + std::to_string(Y0) + " 0.0\n");
-        toOBJ = ss.str();
-        Writer.writeToOBJ(toOBJ);
-        toOBJ.clear();
+        //for different orientation testing
+        if(j<=4)
+        {
+            // Test output to file
+            std::stringstream ss;
+            ss << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
+            toOBJ = ss.str();
+            Writer.writeToOBJ(toOBJ);
+            toOBJ.clear();
+
+            //extra top node
+            std::stringstream sss;
+            Xtop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100);
+            Ytop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100)+5.0;
+            sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
+            toOBJ = sss.str();
+            Writer.writeToOBJ(toOBJ);
+            toOBJ.clear();
+
+            //extra bottom node
+            std::stringstream ssss;
+            Xbot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100);
+            Ybot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100)-5.0;
+            ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
+            toOBJ = ssss.str();
+            Writer.writeToOBJ(toOBJ);
+            toOBJ.clear();
+        }
+        else
+        {
+            // Test output to file
+            std::stringstream ss;
+            ss << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
+            toOBJ = ss.str();
+            Writer.writeToOBJ(toOBJ);
+            toOBJ.clear();
+
+            //extra top node
+            std::stringstream sss;
+            Xtop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)+10.0;
+            Ytop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
+            sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
+            toOBJ = sss.str();
+            Writer.writeToOBJ(toOBJ);
+            toOBJ.clear();
+
+            //extra bottom node
+            std::stringstream ssss;
+            Xbot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)-10.0;
+            Ybot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
+            ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
+            toOBJ = ssss.str();
+            Writer.writeToOBJ(toOBJ);
+            toOBJ.clear();
+        }
 
       }
 
     }
 
   }
+  std::stringstream facePrep;
+  facePrep << "s 1\nusemtl initialShadingGroup\n";
+  toOBJ = facePrep.str();
+  Writer.writeToOBJ(toOBJ);
+  toOBJ.clear();
 }
 
 void GLWindow::initializeGL()
