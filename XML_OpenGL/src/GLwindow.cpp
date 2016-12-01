@@ -46,9 +46,11 @@ void GLWindow::outputToOBJ(bool)
 {
   lonInterval = Parser.maxLon-Parser.minLon;
   latInterval = Parser.maxLat-Parser.minLat;
-  roadWidth=10.0f;
+  roadWidth=0.1f;
   std::stringstream faces;
   verticeCount=1;
+
+  Writer.clearOBJ();
 
   for( uint i = 0; i<Parser.ways.size(); i++)
   {
@@ -132,8 +134,8 @@ void GLWindow::outputToOBJ(bool)
 
         //extra top node
         std::stringstream sss;
-        Xtop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)+roadWidth;
-        Ytop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
+        Xtop0 = (X0)+roadWidth;
+        Ytop0 = (Y0);
         sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
         toOBJ = sss.str();
         Writer.writeToOBJ(toOBJ);
@@ -142,8 +144,8 @@ void GLWindow::outputToOBJ(bool)
 
         //extra bottom node
         std::stringstream ssss;
-        Xbot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)-roadWidth;
-        Ybot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
+        Xbot0 = (X0)-roadWidth;
+        Ybot0 = (Y0);
         ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
         toOBJ = ssss.str();
         Writer.writeToOBJ(toOBJ);

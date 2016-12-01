@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="CGImap 0.5.8 (22076 thorn-03.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <bounds minlat="50.7456500" minlon="-1.9130900" maxlat="50.7464300" maxlon="-1.9118600"/>
+ <node id="619362413" visible="true" version="2" changeset="9160896" timestamp="2011-08-29T19:12:05Z" user="ajpick" uid="2425" lat="50.7433365" lon="-1.9141494"/>
+ <node id="619362438" visible="true" version="2" changeset="3790176" timestamp="2010-02-04T13:07:36Z" user="man on the move" uid="221489" lat="50.7457018" lon="-1.9116097"/>
+ <node id="619362410" visible="true" version="3" changeset="10117642" timestamp="2011-12-14T17:13:02Z" user="mahahahaneapneap" uid="28399" lat="50.7458726" lon="-1.9125617"/>
+ <node id="619362416" visible="true" version="3" changeset="18036860" timestamp="2013-09-25T22:41:38Z" user="SomePlaceMapperCT" uid="445666" lat="50.7469925" lon="-1.9187312"/>
+ <node id="628887983" visible="true" version="1" changeset="3790176" timestamp="2010-02-04T13:07:29Z" user="man on the move" uid="221489" lat="50.7464814" lon="-1.9158052"/>
+ <node id="628888094" visible="true" version="2" changeset="9160896" timestamp="2011-08-29T19:12:05Z" user="ajpick" uid="2425" lat="50.7430131" lon="-1.9143052"/>
+ <node id="628888165" visible="true" version="2" changeset="9160896" timestamp="2011-08-29T19:12:05Z" user="ajpick" uid="2425" lat="50.7431130" lon="-1.9142770"/>
+ <node id="847700193" visible="true" version="3" changeset="8820712" timestamp="2011-07-24T20:05:07Z" user="ajpick" uid="2425" lat="50.7452338" lon="-1.9089203"/>
+ <node id="1326016900" visible="true" version="3" changeset="10117642" timestamp="2011-12-14T17:13:00Z" user="mahahahaneapneap" uid="28399" lat="50.7438873" lon="-1.9137841"/>
+ <node id="1546022847" visible="true" version="1" changeset="10117642" timestamp="2011-12-14T17:12:56Z" user="mahahahaneapneap" uid="28399" lat="50.7455304" lon="-1.9127060"/>
+ <node id="1546022859" visible="true" version="1" changeset="10117642" timestamp="2011-12-14T17:12:57Z" user="mahahahaneapneap" uid="28399" lat="50.7453841" lon="-1.9127875"/>
+ <node id="619362411" visible="true" version="3" changeset="10117642" timestamp="2011-12-14T17:13:01Z" user="mahahahaneapneap" uid="28399" lat="50.7439797" lon="-1.9137260"/>
+ <node id="619362426" visible="true" version="5" changeset="10117642" timestamp="2011-12-14T17:13:02Z" user="mahahahaneapneap" uid="28399" lat="50.7460346" lon="-1.9134693"/>
+ <node id="1572067650" visible="true" version="2" changeset="10277483" timestamp="2012-01-02T23:34:46Z" user="SomePlaceMapperCT" uid="445666" lat="50.7451307" lon="-1.9083358"/>
+ <node id="628888185" visible="true" version="3" changeset="18036860" timestamp="2013-09-25T22:41:38Z" user="SomePlaceMapperCT" uid="445666" lat="50.7471152" lon="-1.9194084"/>
+ <node id="619362418" visible="true" version="5" changeset="23258593" timestamp="2014-06-28T20:42:29Z" user="SomePlaceMapperCT" uid="445666" lat="50.7467479" lon="-1.9121228"/>
+ <node id="3542681746" visible="true" version="1" changeset="31431764" timestamp="2015-05-24T22:46:38Z" user="mahahahaneapneap" uid="28399" lat="50.7462496" lon="-1.9123726"/>
+ <node id="3542681747" visible="true" version="1" changeset="31431764" timestamp="2015-05-24T22:46:38Z" user="mahahahaneapneap" uid="28399" lat="50.7461023" lon="-1.9114846"/>
+ <node id="3542681748" visible="true" version="1" changeset="31431764" timestamp="2015-05-24T22:46:38Z" user="mahahahaneapneap" uid="28399" lat="50.7459524" lon="-1.9107906"/>
+ <node id="619362437" visible="true" version="4" changeset="43600623" timestamp="2016-11-13T10:11:38Z" user="Yorvik Prestigitator" uid="493595" lat="50.7455585" lon="-1.9108881">
+  <tag k="crossing" v="traffic_signals"/>
+  <tag k="crossing_ref" v="pelican"/>
+ </node>
+ <way id="48817901" visible="true" version="7" changeset="31431764" timestamp="2015-05-24T22:46:43Z" user="mahahahaneapneap" uid="28399">
+  <nd ref="628888094"/>
+  <nd ref="628888165"/>
+  <nd ref="619362413"/>
+  <nd ref="1326016900"/>
+  <nd ref="619362411"/>
+  <nd ref="1546022859"/>
+  <nd ref="1546022847"/>
+  <nd ref="619362410"/>
+  <nd ref="3542681746"/>
+  <nd ref="619362418"/>
+  <tag k="highway" v="residential"/>
+  <tag k="name" v="Bryant Road"/>
+ </way>
+ <way id="48817902" visible="true" version="4" changeset="10258211" timestamp="2011-12-31T21:47:23Z" user="Danfox Davies" uid="286764">
+  <nd ref="1572067650"/>
+  <nd ref="847700193"/>
+  <nd ref="619362437"/>
+  <nd ref="619362438"/>
+  <nd ref="619362410"/>
+  <nd ref="619362426"/>
+  <nd ref="628887983"/>
+  <nd ref="619362416"/>
+  <nd ref="628888185"/>
+  <tag k="highway" v="residential"/>
+  <tag k="name" v="Mossley Avenue"/>
+ </way>
+ <way id="348036711" visible="true" version="1" changeset="31431764" timestamp="2015-05-24T22:46:39Z" user="mahahahaneapneap" uid="28399">
+  <nd ref="3542681746"/>
+  <nd ref="3542681747"/>
+  <nd ref="3542681748"/>
+  <tag k="highway" v="service"/>
+ </way>
+</osm>

@@ -20,7 +20,7 @@ struct node
 //way data
 struct way
 {
-  int wayRef;
+  int wayRef = 0;
   uint64_t wayID;
   //storing all the node reference that are inside the way
   std::vector<uint64_t> nodesInWay;

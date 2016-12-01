@@ -13,6 +13,10 @@ XMLParse::~XMLParse()
 
 void XMLParse::parseXML( const std::string &_filename)
 {
+  nodeRef = 0;
+  wayRef = 0;
+  nodes.clear();
+  ways.clear();
   // Open XML file
   std::fstream fileIn;
   fileIn.open( _filename.c_str(), std::ios::in );

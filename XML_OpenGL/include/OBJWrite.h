@@ -8,6 +8,7 @@ public:
   OBJWrite();
   ~OBJWrite();
 
+  void clearOBJ();
   // Write a string to the OBJ file
   void writeToOBJ(std::string _input);
 
