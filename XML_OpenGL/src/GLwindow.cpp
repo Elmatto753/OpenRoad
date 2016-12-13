@@ -46,7 +46,7 @@ void GLWindow::outputToOBJ(bool)
 {
   lonInterval = Parser.maxLon-Parser.minLon;
   latInterval = Parser.maxLat-Parser.minLat;
-  roadWidth=0.1f;
+  roadWidth=10.0f;
   std::stringstream faces;
   verticeCount=1;
 
