@@ -11,7 +11,7 @@
 //node data
 struct node
 {
-    int nodeRef;
+    int nodeRef = 0;
     uint64_t nodeID;
     float nodeLat;
     float nodeLon;
@@ -24,8 +24,11 @@ struct way
   uint64_t wayID;
   //storing all the node reference that are inside the way
   std::vector<uint64_t> nodesInWay;
+  std::vector<uint64_t> intersections;
   std::string name;
 };
+
+
 
 class XMLParse
 {
@@ -38,6 +41,7 @@ public :
   typedef boost::tokenizer<boost::char_separator<char> >tokenizer;
 
   void parseXML( const std::string &_filename);
+  void checkIntersections();
 
   std::vector<node> nodes;
   std::vector<way> ways;

@@ -172,7 +172,7 @@ void XMLParse::parseXML( const std::string &_filename)
         else if ( *tok_iter == "</way>" && inWay == true )
         {
           inWay = false;
-          if( storeWay == true)
+          if( storeWay == true )
           {
             currentWay.wayRef = wayRef;
             ways.push_back(currentWay);
@@ -201,4 +201,40 @@ void XMLParse::parseXML( const std::string &_filename)
   // Close the file
   fileIn.close();
 
+}
+
+void XMLParse::checkIntersections()
+{
+  for(uint i = 0; i<ways.size(); i++)
+  {
+    for(uint j = 0; j<ways[i].nodesInWay.size(); j++)
+    {
+//      node n = ways[i].nodesInWay[j];
+
+      for(uint k = 0; k<ways.size(); k++)
+      {
+        if(i == k)
+        {
+          continue;
+        }
+        else
+        {
+          for(uint l = 0; l<ways[k].nodesInWay.size(); l++)
+          {
+            if(ways[i].nodesInWay[j] == ways[k].nodesInWay[l])
+            {
+              ways[i].intersections.push_back(ways[i].nodesInWay[j]);
+
+            }
+          }
+        }
+      }
+
+    }
+  }
+  for(int i = 0; i<ways.size(); i++)
+  {
+    std::cout<<" size = "<<ways[i].intersections.size()<<"\n";
+  }
+  std::cout<<"hi";
 }

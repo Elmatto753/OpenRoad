@@ -27,6 +27,7 @@ GLWindow::~GLWindow()
 void GLWindow::test(bool)
 {
   Parser.parseXML("data/map.osm");
+  Parser.checkIntersections();
 }
 
 QString GLWindow::openFileBrowser(bool)
