@@ -27,7 +27,6 @@ GLWindow::~GLWindow()
 void GLWindow::test(bool)
 {
   Parser.parseXML("data/map.osm");
-  Parser.checkIntersections();
 }
 
 QString GLWindow::openFileBrowser(bool)
@@ -38,6 +37,7 @@ QString GLWindow::openFileBrowser(bool)
   if(fileName != nullptr)
   {
     Parser.parseXML(fileName.toStdString());
+    Parser.checkIntersections();
   }
 
   return fileName;
@@ -47,7 +47,7 @@ void GLWindow::outputToOBJ(bool)
 {
   lonInterval = Parser.maxLon-Parser.minLon;
   latInterval = Parser.maxLat-Parser.minLat;
-  roadWidth=10.0f;
+  roadWidth=1.0f;
   std::stringstream faces;
   verticeCount=1;
 

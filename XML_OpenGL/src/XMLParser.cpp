@@ -164,7 +164,7 @@ void XMLParse::parseXML( const std::string &_filename)
           //std::cout<< currentWay.name;
         }
 
-        else if ( *tok_iter == "highway")
+        else if ( *tok_iter == "highway" && inWay == true)
         {
           storeWay = true;
         }
@@ -180,6 +180,7 @@ void XMLParse::parseXML( const std::string &_filename)
             wayRef++;
           }
           currentWay.nodesInWay.clear();
+          currentWay.name.clear();
           storeWay = false;
 
         }
@@ -221,10 +222,10 @@ void XMLParse::checkIntersections()
         {
           for(uint l = 0; l<ways[k].nodesInWay.size(); l++)
           {
-            if(ways[i].nodesInWay[j] == ways[k].nodesInWay[l])
+            if(ways[i].nodesInWay[j] == ways[k].nodesInWay[l] && ways[i].nodesInWay[j] != nodes.size())
             {
+              //std::cout<<ways[i].nodesInWay[j]<<"\n";
               ways[i].intersections.push_back(ways[i].nodesInWay[j]);
-
             }
           }
         }
@@ -232,9 +233,16 @@ void XMLParse::checkIntersections()
 
     }
   }
-  for(int i = 0; i<ways.size(); i++)
-  {
-    std::cout<<" size = "<<ways[i].intersections.size()<<"\n";
-  }
-  std::cout<<"hi";
+//  for(uint i = 0; i<ways.size(); i++)
+//  {
+//    std::cout<<"size = "<<ways[i].intersections.size()<<"\n";
+//    if(ways[i].intersections.size() >= 10)
+//    {
+//      std::cout<<ways[i].wayID<<"\n";
+//      for(uint j = 0; j<ways[i].intersections.size(); j++)
+//      {
+//        std::cout<<nodes[ways[i].intersections[j]].nodeID<<"\n";
+//      }
+//    }
+//  }
 }
