@@ -47,7 +47,7 @@ void GLWindow::outputToOBJ(bool)
 {
   lonInterval = Parser.maxLon-Parser.minLon;
   latInterval = Parser.maxLat-Parser.minLat;
-  roadWidth=1.0f;
+  roadWidth=10.0f;
   std::stringstream faces;
   verticeCount=1;
 
@@ -61,99 +61,177 @@ void GLWindow::outputToOBJ(bool)
       if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat<=Parser.maxLat)&&
          (Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon<=Parser.maxLon))
       {
-        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
-        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100;
+          /*
+          //for different orientation testing - t-junction
+          //for vertical roads
+          if(j<=4)
+          {
+              // Test output to file
+              std::stringstream ss;
+              ss << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
+              toOBJ = ss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
 
-        /*
-        //for different orientation testing - t-junction
-        //for vertical roads
-        if(j<=4)
-        {
-            // Test output to file
-            std::stringstream ss;
-            ss << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
-            toOBJ = ss.str();
-            Writer.writeToOBJ(toOBJ);
-            toOBJ.clear();
+              //extra top node
+              std::stringstream sss;
+              Xtop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100);
+              Ytop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100)+roadWidth;
+              sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
+              toOBJ = sss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
 
-            //extra top node
-            std::stringstream sss;
-            Xtop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100);
-            Ytop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100)+roadWidth;
-            sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
-            toOBJ = sss.str();
-            Writer.writeToOBJ(toOBJ);
-            toOBJ.clear();
+              //extra bottom node
+              std::stringstream ssss;
+              Xbot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100);
+              Ybot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100)-roadWidth;
+              ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
+              toOBJ = ssss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+          }
+          //for horizontal roads
+          else
+          {
+              // Test output to file
+              std::stringstream ss;
+              ss << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
+              toOBJ = ss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
 
-            //extra bottom node
-            std::stringstream ssss;
-            Xbot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100);
-            Ybot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100)-roadWidth;
-            ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
-            toOBJ = ssss.str();
-            Writer.writeToOBJ(toOBJ);
-            toOBJ.clear();
+              //extra top node
+              std::stringstream sss;
+              Xtop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)+roadWidth;
+              Ytop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
+              sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
+              toOBJ = sss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+
+              //extra bottom node
+              std::stringstream ssss;
+              Xbot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)-roadWidth;
+              Ybot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
+              ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
+              toOBJ = ssss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+          }*/
+
+          //NEW SYSTEM, CALCULATES HOW MUCH ROAD WIDTH TO ADD IN HORIZONTAL AND VERTICAL BASED ON DIFFERENCE IN LAT AND LONG BETWEEN TWO NODES
+          //for node first only - first two nodes will have same scalar affecting them, first two nodes setup occuring here
+          if(j==1)
+          {
+              X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
+              X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100;
+
+              float latDiff = X1-X0;
+              float lonDiff = Y1-Y0;
+              float sum =latDiff+lonDiff;
+
+              // Test output to file
+              std::stringstream orig;
+              orig << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
+              toOBJ = orig.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+
+              //extra top node
+              std::stringstream top;
+              Xtop0 = X0+(roadWidth*lonDiff/sum);
+              Ytop0 = Y0-(roadWidth*latDiff/sum);
+              top << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
+              toOBJ = top.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+
+              //extra bottom node
+              std::stringstream bot;
+              Xbot0 = X0-(roadWidth*lonDiff/sum);
+              Ybot0 = Y0+(roadWidth*latDiff/sum);
+              bot << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
+              toOBJ = bot.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+
+              // Test output to file
+              std::stringstream orig1;
+              orig1 << "v " + (std::to_string(X1) + " 0.0 " + std::to_string(Y1) + "\n");
+              toOBJ = orig1.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+
+              //extra top node
+              std::stringstream top1;
+              Xtop0 = X1+(roadWidth*lonDiff/sum);
+              Ytop0 = Y1-(roadWidth*latDiff/sum);
+              top1 << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
+              toOBJ = top1.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+
+              //extra bottom node
+              std::stringstream bot1;
+              Xbot0 = X1-(roadWidth*lonDiff/sum);
+              Ybot0 = Y1+(roadWidth*latDiff/sum);
+              bot1 << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
+              toOBJ = bot1.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+          }
+          //must skip second turn as the set of beginning nodes carried out above, for this the scaling is calculated using node behind current
+          else if(j>2)
+          {
+              //current node
+              X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
+              //prev node
+              X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2]].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2]].nodeLon-Parser.minLon)/lonInterval) * 100;
+
+              float latDiff = X1-X0;
+              float lonDiff = Y1-Y0;
+              float sum =latDiff+lonDiff;
+
+              // Test output to file
+              std::stringstream ss;
+              ss << "v " + (std::to_string(X1) + " 0.0 " + std::to_string(Y1) + "\n");
+              toOBJ = ss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+
+              //extra top node
+              std::stringstream sss;
+              Xtop0 = X1+(roadWidth*lonDiff/sum);
+              Ytop0 = Y1-(roadWidth*latDiff/sum);
+              sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
+              toOBJ = sss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+
+              //extra bottom node
+              std::stringstream ssss;
+              Xbot0 = X1-(roadWidth*lonDiff/sum);
+              Ybot0 = Y1+(roadWidth*latDiff/sum);
+              ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
+              toOBJ = ssss.str();
+              Writer.writeToOBJ(toOBJ);
+              toOBJ.clear();
+              verticeCount+=1;
+          }
         }
-        //for horizontal roads
-        else
-        {
-            // Test output to file
-            std::stringstream ss;
-            ss << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
-            toOBJ = ss.str();
-            Writer.writeToOBJ(toOBJ);
-            toOBJ.clear();
-
-            //extra top node
-            std::stringstream sss;
-            Xtop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)+roadWidth;
-            Ytop0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
-            sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
-            toOBJ = sss.str();
-            Writer.writeToOBJ(toOBJ);
-            toOBJ.clear();
-
-            //extra bottom node
-            std::stringstream ssss;
-            Xbot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100)-roadWidth;
-            Ybot0 = (((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100);
-            ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
-            toOBJ = ssss.str();
-            Writer.writeToOBJ(toOBJ);
-            toOBJ.clear();
-        }*/
-
-        // Test output to file
-        std::stringstream ss;
-        ss << "v " + (std::to_string(X0) + " 0.0 " + std::to_string(Y0) + "\n");
-        toOBJ = ss.str();
-        Writer.writeToOBJ(toOBJ);
-        toOBJ.clear();
-        verticeCount+=1;
-
-        //extra top node
-        std::stringstream sss;
-        Xtop0 = (X0)+roadWidth;
-        Ytop0 = (Y0);
-        sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
-        toOBJ = sss.str();
-        Writer.writeToOBJ(toOBJ);
-        toOBJ.clear();
-        verticeCount+=1;
-
-        //extra bottom node
-        std::stringstream ssss;
-        Xbot0 = (X0)-roadWidth;
-        Ybot0 = (Y0);
-        ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
-        toOBJ = ssss.str();
-        Writer.writeToOBJ(toOBJ);
-        toOBJ.clear();
-        verticeCount+=1;
-      }
-
     }
 
   }
