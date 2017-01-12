@@ -58,8 +58,8 @@ void GLWindow::outputToOBJ(bool)
     for(uint j = 1; j<Parser.ways[i].nodesInWay.size(); j++)
     {
       //if all valid (e.g. not outliers) then push back node - NEED TO DO THIS STEP ON OUTPUT ie. WHEN POPULATING OBJ FILE
-      if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat<=Parser.maxLat)&&
-         (Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon<=Parser.maxLon))
+      if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
+         (Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
       {
           /*
           //for different orientation testing - t-junction
@@ -124,10 +124,10 @@ void GLWindow::outputToOBJ(bool)
           //for node first only - first two nodes will have same scalar affecting them, first two nodes setup occuring here
           if(j==1)
           {
-              X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
-              Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
-              X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100;
-              Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100;
+              X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+              X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
               float latDiff = X1-X0;
               float lonDiff = Y1-Y0;
@@ -193,11 +193,11 @@ void GLWindow::outputToOBJ(bool)
           else if(j>2)
           {
               //current node
-              X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
-              Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
+              X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
               //prev node
-              X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2]].nodeLat-Parser.minLat)/latInterval) * 100;
-              Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2]].nodeLon-Parser.minLon)/lonInterval) * 100;
+              X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+              Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
               float latDiff = X1-X0;
               float lonDiff = Y1-Y0;
@@ -365,13 +365,13 @@ void GLWindow::drawNodes()
     for(uint j = 1; j<Parser.ways[i].nodesInWay.size(); j++)
     {
       //if all valid (e.g. not outliers) then push back node - NEED TO DO THIS STEP ON OUTPUT ie. WHEN POPULATING OBJ FILE
-      if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat<=Parser.maxLat)&&
-         (Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon<=Parser.maxLon))
+      if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
+         (Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
       {
-        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1]].nodeLon-Parser.minLon)/lonInterval) * 100;
-        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
         glPushMatrix();
           glRotatef(90.0, 0.0, 0.0, 1.0);

@@ -15,6 +15,7 @@ struct node
     uint64_t nodeID;
     float nodeLat;
     float nodeLon;
+    bool isIntersection = false;
 };
 
 //way data
@@ -23,8 +24,8 @@ struct way
   int wayRef = 0;
   uint64_t wayID;
   //storing all the node reference that are inside the way
-  std::vector<uint64_t> nodesInWay;
-  std::vector<uint64_t> intersections;
+  std::vector<node> nodesInWay;
+  std::vector<node> intersections;
   std::string name;
 };
 
