@@ -222,11 +222,17 @@ void XMLParse::checkIntersections()
         {
           for(uint l = 0; l<ways[k].nodesInWay.size(); l++)
           {
-            if(ways[i].nodesInWay[j].nodeRef == ways[k].nodesInWay[l].nodeRef && ways[i].nodesInWay[j].nodeRef != nodes.size())
+            if(ways[i].nodesInWay[j].nodeID == ways[k].nodesInWay[l].nodeID && ways[i].nodesInWay[j].nodeRef != nodes.size())
             {
               //std::cout<<ways[i].nodesInWay[j]<<"\n";
+              std::cout<<i<<" "<<k<<"\n";
+              std::cout<<"nodeRef = "<<ways[i].nodesInWay[j].nodeID<<"\n";
               ways[i].nodesInWay[j].isIntersection = true;
               ways[i].intersections.push_back(ways[i].nodesInWay[j]);
+            }
+            else
+            {
+             // std::cout<<"size = "<<nodes.size()<<"\n";
             }
           }
         }

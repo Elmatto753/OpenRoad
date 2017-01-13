@@ -124,6 +124,11 @@ void GLWindow::outputToOBJ(bool)
           //for node first only - first two nodes will have same scalar affecting them, first two nodes setup occuring here
           if(j==1)
           {
+            std::stringstream name;
+            name << "#" << Parser.ways[i].name << "\n";
+            toOBJ = name.str();
+            Writer.writeToOBJ(toOBJ);
+            toOBJ.clear();
               X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
               Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
               X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
@@ -368,6 +373,7 @@ void GLWindow::drawNodes()
       if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
          (Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
       {
+//        std::cout<<Parser.ways[i].nodesInWay[j - 1].nodeRef<<"\n";
         X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
         Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
         X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
