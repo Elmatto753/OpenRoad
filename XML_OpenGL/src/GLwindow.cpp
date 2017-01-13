@@ -136,6 +136,14 @@ void GLWindow::outputToOBJ(bool)
 
               float latDiff = X1-X0;
               float lonDiff = Y1-Y0;
+              if(latDiff<0)
+              {
+                  latDiff*=-1;
+              }
+              if(lonDiff<0)
+              {
+                  lonDiff*=-1;
+              }
               float sum =latDiff+lonDiff;
 
               // Test output to file
@@ -177,7 +185,7 @@ void GLWindow::outputToOBJ(bool)
               //extra top node
               std::stringstream top1;
               Xtop0 = X1+(roadWidth*lonDiff/sum);
-              Ytop0 = Y1-(roadWidth*latDiff/sum);
+              Ytop0 = Y1+(roadWidth*latDiff/sum);
               top1 << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
               toOBJ = top1.str();
               Writer.writeToOBJ(toOBJ);
@@ -187,7 +195,7 @@ void GLWindow::outputToOBJ(bool)
               //extra bottom node
               std::stringstream bot1;
               Xbot0 = X1-(roadWidth*lonDiff/sum);
-              Ybot0 = Y1+(roadWidth*latDiff/sum);
+              Ybot0 = Y1-(roadWidth*latDiff/sum);
               bot1 << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
               toOBJ = bot1.str();
               Writer.writeToOBJ(toOBJ);
@@ -206,6 +214,14 @@ void GLWindow::outputToOBJ(bool)
 
               float latDiff = X1-X0;
               float lonDiff = Y1-Y0;
+              if(latDiff<0)
+              {
+                  latDiff*=-1;
+              }
+              if(lonDiff<0)
+              {
+                  lonDiff*=-1;
+              }
               float sum =latDiff+lonDiff;
 
               // Test output to file
@@ -219,7 +235,7 @@ void GLWindow::outputToOBJ(bool)
               //extra top node
               std::stringstream sss;
               Xtop0 = X1+(roadWidth*lonDiff/sum);
-              Ytop0 = Y1-(roadWidth*latDiff/sum);
+              Ytop0 = Y1+(roadWidth*latDiff/sum);
               sss << "v " + (std::to_string(Xtop0) + " 0.0 " + std::to_string(Ytop0) + "\n");
               toOBJ = sss.str();
               Writer.writeToOBJ(toOBJ);
@@ -229,7 +245,7 @@ void GLWindow::outputToOBJ(bool)
               //extra bottom node
               std::stringstream ssss;
               Xbot0 = X1-(roadWidth*lonDiff/sum);
-              Ybot0 = Y1+(roadWidth*latDiff/sum);
+              Ybot0 = Y1-(roadWidth*latDiff/sum);
               ssss << "v " + (std::to_string(Xbot0) + " 0.0 " + std::to_string(Ybot0) + "\n");
               toOBJ = ssss.str();
               Writer.writeToOBJ(toOBJ);
