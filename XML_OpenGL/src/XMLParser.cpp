@@ -136,7 +136,7 @@ void XMLParse::parseXML( const std::string &_filename)
           uint64_t temp;
           ss << *++tok_iter;
           ss >> temp;
-          for(uint i = 0; i <= nodeRef; i++)
+          for(uint i = 0; i < nodeRef; i++)
           {
             if(nodes[i].nodeID == temp)
             {
@@ -224,9 +224,6 @@ void XMLParse::checkIntersections()
           {
             if(ways[i].nodesInWay[j].nodeID == ways[k].nodesInWay[l].nodeID && ways[i].nodesInWay[j].nodeRef != nodes.size())
             {
-              //std::cout<<ways[i].nodesInWay[j]<<"\n";
-              std::cout<<i<<" "<<k<<"\n";
-              std::cout<<"nodeRef = "<<ways[i].nodesInWay[j].nodeID<<"\n";
               ways[i].nodesInWay[j].isIntersection = true;
               ways[i].intersections.push_back(ways[i].nodesInWay[j]);
             }
