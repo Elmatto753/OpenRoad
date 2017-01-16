@@ -174,7 +174,16 @@ void XMLParse::parseXML( const std::string &_filename)
           inWay = false;
           if( storeWay == true )
           {
+            uint j;
             currentWay.wayRef = wayRef;
+            // Building out a map of "next" nodes for each node in a way
+            // "next" is mapped to a corresponding way, in case a node is in more than one way
+            for(j = 1; j < currentWay.nodesInWay.size(); j++)
+            {
+              currentWay.nodesInWay[j - 1].next[currentWay.wayRef] = &currentWay.nodesInWay[j];
+            }
+            // The final node in a way has a null next
+            currentWay.nodesInWay[j - 1].next[currentWay.wayRef] = nullptr;
             ways.push_back(currentWay);
 
             wayRef++;
@@ -225,6 +234,8 @@ void XMLParse::checkIntersections()
             if(ways[i].nodesInWay[j].nodeID == ways[k].nodesInWay[l].nodeID && ways[i].nodesInWay[j].nodeRef != nodes.size())
             {
               ways[i].nodesInWay[j].isIntersection = true;
+              ways[i].nodesInWay[j].numIntersections++;
+              ways[i].nodesInWay[j].intersectsWith.push_back(ways[k].name);
               ways[i].intersections.push_back(ways[i].nodesInWay[j]);
             }
             else
@@ -232,6 +243,14 @@ void XMLParse::checkIntersections()
              // std::cout<<"size = "<<nodes.size()<<"\n";
             }
           }
+        }
+      }
+      if(ways[i].nodesInWay[j].intersectsWith.size() != 0)
+      {
+        std::cout<<"node "<<ways[i].nodesInWay[j].nodeRef<<" is in "<<ways[i].name<<", has "<<ways[i].nodesInWay[j].numIntersections<<" intersections and intersects with:\n";
+        for(uint m = 0; m < ways[i].nodesInWay[j].intersectsWith.size(); m++)
+        {
+          std::cout<<ways[i].nodesInWay[j].intersectsWith[m]<<"\n";
         }
       }
 
