@@ -231,7 +231,7 @@ void XMLParse::checkIntersections()
         {
           for(uint l = 0; l<ways[k].nodesInWay.size(); l++)
           {
-            if(ways[i].nodesInWay[j].nodeID == ways[k].nodesInWay[l].nodeID && ways[i].nodesInWay[j].nodeRef != nodes.size())
+            if(ways[i].nodesInWay[j].nodeID == ways[k].nodesInWay[l].nodeID && ways[i].nodesInWay[j].nodeRef != int(nodes.size()))
             {
               ways[i].nodesInWay[j].isIntersection = true;
               ways[i].nodesInWay[j].numIntersections++;
