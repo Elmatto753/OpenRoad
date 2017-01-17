@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'GLwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.5.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,15 +12,15 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'GLwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.5.1. It"
+#error "This file was generated using the moc from 5.7.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_GLWindow_t {
-    QByteArrayData data[6];
-    char stringdata0[50];
+    QByteArrayData data[7];
+    char stringdata0[67];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,11 +34,12 @@ QT_MOC_LITERAL(1, 9, 4), // "test"
 QT_MOC_LITERAL(2, 14, 0), // ""
 QT_MOC_LITERAL(3, 15, 6), // "slider"
 QT_MOC_LITERAL(4, 22, 11), // "outputToOBJ"
-QT_MOC_LITERAL(5, 34, 15) // "openFileBrowser"
+QT_MOC_LITERAL(5, 34, 16), // "createNewNetwork"
+QT_MOC_LITERAL(6, 51, 15) // "openFileBrowser"
 
     },
     "GLWindow\0test\0\0slider\0outputToOBJ\0"
-    "openFileBrowser"
+    "createNewNetwork\0openFileBrowser"
 };
 #undef QT_MOC_LITERAL
 
@@ -48,7 +49,7 @@ static const uint qt_meta_data_GLWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -56,14 +57,16 @@ static const uint qt_meta_data_GLWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   34,    2, 0x0a /* Public */,
-       3,    1,   37,    2, 0x0a /* Public */,
-       4,    1,   40,    2, 0x0a /* Public */,
-       5,    1,   43,    2, 0x0a /* Public */,
+       1,    1,   39,    2, 0x0a /* Public */,
+       3,    1,   42,    2, 0x0a /* Public */,
+       4,    1,   45,    2, 0x0a /* Public */,
+       5,    1,   48,    2, 0x0a /* Public */,
+       6,    1,   51,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::QString, QMetaType::Bool,    2,
 
@@ -79,7 +82,8 @@ void GLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 0: _t->test((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 1: _t->slider((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->outputToOBJ((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 3: { QString _r = _t->openFileBrowser((*reinterpret_cast< bool(*)>(_a[1])));
+        case 3: _t->createNewNetwork((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 4: { QString _r = _t->openFileBrowser((*reinterpret_cast< bool(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = _r; }  break;
         default: ;
         }
@@ -111,13 +115,13 @@ int GLWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }

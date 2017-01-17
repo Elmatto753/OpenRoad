@@ -11,7 +11,7 @@ XMLParse::~XMLParse()
 
 }
 
-void XMLParse::parseXML( const std::string &_filename)
+void XMLParse::parseXML(const std::string &_filename)
 {
   nodeRef = 0;
   wayRef = 0;
@@ -37,7 +37,6 @@ void XMLParse::parseXML( const std::string &_filename)
 
   while( !fileIn.eof() )
   {
-
     // Get a line and turn it into tokens
     getline( fileIn, lineBuffer, '\n' );
     ++lineNum;
@@ -191,17 +190,11 @@ void XMLParse::parseXML( const std::string &_filename)
           currentWay.nodesInWay.clear();
           currentWay.name.clear();
           storeWay = false;
-
         }
-
       }
-
       //std::cout<<"\n";
-
-
       //++firstWord;
     }
-
   }
 
   std::cout<<"\n"<<wayRef<<"\n";

@@ -47,7 +47,7 @@ void GLWindow::outputToOBJ(bool)
 {
   lonInterval = Parser.maxLon-Parser.minLon;
   latInterval = Parser.maxLat-Parser.minLat;
-  roadWidth=10.0f;
+  roadWidth=1.0f;
   std::stringstream faces;
   verticeCount=1;
   float nodeCount=0;
@@ -345,4 +345,11 @@ void GLWindow::drawNodes()
     }
 
   }
+}
+
+void GLWindow::createNewNetwork(bool)
+{
+  float currentWay = 0.0f;
+  float intersectionUseAgain = 0.0f;
+  node *currentNode = &Parser.nodes[0];
 }

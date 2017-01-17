@@ -23,6 +23,7 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
     void test(bool);
     void slider(int);
     void outputToOBJ(bool);
+    void createNewNetwork(bool);
     QString openFileBrowser(bool);
 
   private:
