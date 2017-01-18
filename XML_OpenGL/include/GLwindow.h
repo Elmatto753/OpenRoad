@@ -29,8 +29,10 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
   private:
     float m_y;
     void timerEvent(QTimerEvent *);
+    node findNextnode(node CurrentNode, node PrevNode);
     XMLParse Parser;
     OBJWrite Writer;
+    network NewNetwork;
     QString fileName;
     bool OBJwritten = false;
     float lonInterval = Parser.maxLon-Parser.minLon;

@@ -55,10 +55,10 @@ void GLWindow::outputToOBJ(bool)
 
     Writer.clearOBJ();
 
-    for( uint i = 0; i<Parser.ways.size(); i++)
+    for( uint i = 0; i<Parser.Network.ways.size(); i++)
     {
         verticeCountWay=1;
-        for(uint j = 1; j<Parser.ways[i].nodesInWay.size(); j++)
+        for(uint j = 1; j<Parser.Network.ways[i].nodesInWay.size(); j++)
         {
             nodeCount+=1;
             //if all valid (e.g. not outliers) then push back node - NEED TO DO THIS STEP ON OUTPUT ie. WHEN POPULATING OBJ FILE
@@ -67,21 +67,21 @@ void GLWindow::outputToOBJ(bool)
             //{
                 //only if theres enough nodes in a way to make a face - theres a problem here with outliers, the original way may well
                 //have more than 1 node but when it goes through the next check not all nodes may make it through
-                if(Parser.ways[i].nodesInWay.size()>1)
+                if(Parser.Network.ways[i].nodesInWay.size()>1)
                 {
                     //NEW SYSTEM, CALCULATES HOW MUCH ROAD WIDTH TO ADD IN HORIZONTAL AND VERTICAL BASED ON DIFFERENCE IN LAT AND LONG BETWEEN TWO NODES
                     //for node first only - first two nodes will have same scalar affecting them, first two nodes setup occuring here
                     if(j==1)
                     {
                         std::stringstream name;
-                        name << "#" << Parser.ways[i].name << "\n";
+                        name << "#" << Parser.Network.ways[i].name << "\n";
                         toOBJ = name.str();
                         Writer.writeToOBJ(toOBJ);
                         toOBJ.clear();
-                        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
-                        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
                         float latDiff = X1-X0;
                         float lonDiff = Y1-Y0;
@@ -161,11 +161,11 @@ void GLWindow::outputToOBJ(bool)
                     else if(j>2)
                     {
                         //current node
-                        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
                         //prev node
-                        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 2].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 2].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 2].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
                         float latDiff = X1-X0;
                         float lonDiff = Y1-Y0;
@@ -324,19 +324,19 @@ void GLWindow::drawNodes()
 
   glPointSize(3.0f);
 
-  for( uint i = 0; i<Parser.ways.size(); i++)
+  for( uint i = 0; i<Parser.Network.ways.size(); i++)
   {
-    for(uint j = 1; j<Parser.ways[i].nodesInWay.size(); j++)
+    for(uint j = 1; j<Parser.Network.ways[i].nodesInWay.size(); j++)
     {
       //if all valid (e.g. not outliers) then push back node
-      if((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
-         (Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
+      if((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
+         (Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
       {
 //        std::cout<<Parser.ways[i].nodesInWay[j - 1].nodeRef<<"\n";
-        X0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y0 = ((Parser.nodes[Parser.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
-        X1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y1 = ((Parser.nodes[Parser.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
         glPushMatrix();
           glRotatef(90.0, 0.0, 0.0, 1.0);
@@ -364,7 +364,102 @@ void GLWindow::drawNodes()
 
 void GLWindow::createNewNetwork(bool)
 {
-  float currentWay = 0.0f;
+  for(uint i = 0; i < Parser.Network.nodes.size(); i++)
+  {
+    Parser.Network.nodes[i].inNewNetwork = false;
+  }
   float intersectionUseAgain = 0.0f;
-  node *currentNode = &Parser.nodes[0];
+  NewNetwork.currentNode = Parser.Network.nodes[0];
+  NewNetwork.currentWay.nodesInWay.push_back(Parser.Network.nodes[0]);
+  NewNetwork.currentNode.inNewNetwork = true;
+  NewNetwork.currentNode = Parser.Network.nodes[1];
+  NewNetwork.currentWay.nodesInWay.push_back(Parser.Network.nodes[1]);
+  bool unusedNodes = true;
+  node prevNode = Parser.Network.nodes[0];
+  while(unusedNodes == true)
+  {
+    unusedNodes = false;
+    for(uint j = 0; j <Parser.Network.nodes.size(); j++)
+    {
+      if(Parser.Network.nodes[j].inNewNetwork == true)
+      {
+        continue;
+      }
+      else
+      {
+        NewNetwork.currentNode.inNewNetwork = true;
+        unusedNodes = true;
+        node temp = NewNetwork.currentNode;
+        NewNetwork.currentNode = findNextnode(NewNetwork.currentNode, prevNode);
+        prevNode = temp;
+        NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
+      }
+    }
+  }
+}
+
+node GLWindow::findNextnode(node CurrentNode, node PrevNode)
+{
+  node temp[5];
+  float len;
+  float tempLen[5];
+  for(uint i = 0; i < Parser.Network.nodes.size(); i++)
+  {
+    bool isInWay = false;
+    if(Parser.Network.nodes[i].nodeRef != CurrentNode.nodeRef)
+    {
+      for(uint x = 0; x < NewNetwork.currentWay.nodesInWay.size(); x++)
+      {
+        if(Parser.Network.nodes[i].nodeRef == NewNetwork.currentWay.nodesInWay[x].nodeRef)
+        {
+          isInWay = true;
+          break;
+        }
+      }
+      if(isInWay == true)
+      {
+        isInWay = false;
+        break;
+      }
+      len = (sqrt((CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat)*(CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat) + (CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)*(CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)));
+      for(int j = 0; j < 5; j++)
+      {
+        tempLen[j] = (sqrt((CurrentNode.nodeLat - temp[j].nodeLat)*(CurrentNode.nodeLat - temp[j].nodeLat) + (CurrentNode.nodeLon - temp[j].nodeLon)*(CurrentNode.nodeLon - temp[j].nodeLon)));
+        if(len < tempLen[j])
+        {
+          for(int y = j; y < 5; y++)
+          {
+            temp[y+1] = temp[y];
+          }
+          temp[j] = Parser.Network.nodes[i];
+          break;
+
+        }
+      }
+    }
+  }
+  for(uint k = 0; k < 5; k++)
+  {
+    if(NewNetwork.nodes[temp[k].nodeRef].numIntersections == 4)
+    {
+      continue;
+    }
+    float mag = sqrt((CurrentNode.nodeLat - PrevNode.nodeLat)*(CurrentNode.nodeLat - PrevNode.nodeLat) + (CurrentNode.nodeLon - PrevNode.nodeLon)*(CurrentNode.nodeLon - PrevNode.nodeLon));
+    float tNormLat = (CurrentNode.nodeLat - temp[k].nodeLat) / tempLen[k];
+    float tNormLon = (CurrentNode.nodeLon - temp[k].nodeLon) / tempLen[k];
+    float cNormLat = (CurrentNode.nodeLat - PrevNode.nodeLat) / mag;
+    float cNormLon = (CurrentNode.nodeLon - PrevNode.nodeLon) / mag;
+
+    if(acos(tNormLat * cNormLat + tNormLon * cNormLon) < 0.523599)
+    {
+      continue;
+    }
+
+    // TODO: Check if this would cross over existing road
+
+    return temp[k];
+
+  }
+
+  exit(0);
 }

@@ -17,6 +17,7 @@ struct node
     float nodeLat;
     float nodeLon;
     bool isIntersection = false;
+    bool inNewNetwork = false;
     uint numIntersections = 0;
     std::vector<std::string> intersectsWith;
     std::map<uint, node *> next;
@@ -33,7 +34,22 @@ struct way
   std::string name;
 };
 
+class network
+{
+public :
 
+  network();
+
+  ~network();
+
+  std::vector<node> nodes;
+  std::vector<way> ways;
+  node currentNode;
+  way currentWay;
+
+  // Set up node referencing
+
+};
 
 class XMLParse
 {
@@ -43,21 +59,19 @@ public :
 
   ~XMLParse();
 
+  network Network;
+
   typedef boost::tokenizer<boost::char_separator<char> >tokenizer;
 
   void parseXML( const std::string &_filename);
   void checkIntersections();
 
-  std::vector<node> nodes;
-  std::vector<way> ways;
-  node currentNode;
-  way currentWay;
-
-  // Set up node referencing
   uint nodeRef = 0;
   uint wayRef = 0;
   float minLat, minLon, maxLat, maxLon;
 
 };
+
+
 
 #endif
