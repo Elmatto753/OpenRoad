@@ -21,13 +21,11 @@ private:
   GLWindow *m_gl;
   QString *m_fileName;
   void keyPressEvent(QKeyEvent *_event);
+  int test=0;
 
 
 public slots:
-  void receiverthingy(int _s, std::string _ss) { std::cout << _s << ": " << _ss << "\n"; }
-
-signals:
-  void imasignal(int, std::string);
+  void receiverthingy() { test=1; }
 };
 
 #endif // MAINWINDOW_H

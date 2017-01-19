@@ -112,14 +112,9 @@ void XMLParse::parseXML(const std::string &_filename)
           Network.currentNode.nodeLon=(boost::lexical_cast<float>( *tok_iter ));
           Network.currentNode.nodeRef=nodeRef;
 
-          //if all valid (e.g. not outliers) then push back node
-//          if((currentNode.nodeLat>=minLat)&&(currentNode.nodeLat<=maxLat)&&
-//             (currentNode.nodeLon>=minLon)&&(currentNode.nodeLon<=maxLon))
-//          {
 
-              Network.nodes.push_back(Network.currentNode);
-              ++nodeRef;
-//          }
+          Network.nodes.push_back(Network.currentNode);
+          ++nodeRef;
         }
 
         else if( *tok_iter == "<way" )
@@ -156,7 +151,6 @@ void XMLParse::parseXML(const std::string &_filename)
 
           }
 
-          // may have to check if node reference is in vector of nodes here
         }
 
         else if( *tok_iter == "name" && inWay == true )
@@ -170,7 +164,6 @@ void XMLParse::parseXML(const std::string &_filename)
             }
           }
           ss >> Network.currentWay.name;
-          //std::cout<< currentWay.name;
         }
 
         else if ( *tok_iter == "highway" && inWay == true)
@@ -202,8 +195,6 @@ void XMLParse::parseXML(const std::string &_filename)
           storeWay = false;
         }
       }
-      //std::cout<<"\n";
-      //++firstWord;
     }
   }
 
@@ -222,8 +213,6 @@ void XMLParse::checkIntersections()
   {
     for(uint j = 0; j<Network.ways[i].nodesInWay.size(); j++)
     {
-//      node n = ways[i].nodesInWay[j];
-
       for(uint k = 0; k<Network.ways.size(); k++)
       {
         if(i == k)
@@ -259,18 +248,6 @@ void XMLParse::checkIntersections()
 
     }
   }
-//  for(uint i = 0; i<ways.size(); i++)
-//  {
-//    std::cout<<"size = "<<ways[i].intersections.size()<<"\n";
-//    if(ways[i].intersections.size() >= 10)
-//    {
-//      std::cout<<ways[i].wayID<<"\n";
-//      for(uint j = 0; j<ways[i].intersections.size(); j++)
-//      {
-//        std::cout<<nodes[ways[i].intersections[j]].nodeID<<"\n";
-//      }
-//    }
-//  }
 }
 
 

@@ -46,9 +46,6 @@ public :
   std::vector<way> ways;
   node currentNode;
   way currentWay;
-
-  // Set up node referencing
-
 };
 
 class XMLParse
@@ -69,7 +66,6 @@ public :
   uint nodeRef = 0;
   uint wayRef = 0;
   float minLat, minLon, maxLat, maxLon;
-
 };
 
 

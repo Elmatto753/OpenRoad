@@ -15,8 +15,8 @@
 GLWindow::GLWindow(QWidget *_parent) :
   QOpenGLWidget(_parent)
 {
-//    setTitle("Simple GL Window");
     m_y=0.0f;
+    //NEED TO CHANGE TO 0, MEANS DEFAULT WILL BE TO HAVE THE NEW SYSTEM SELECTED FOR DRAWING
     originalSystem=1;
 }
 
@@ -40,6 +40,8 @@ QString GLWindow::openFileBrowser(bool)
     Parser.parseXML(fileName.toStdString());
     Parser.checkIntersections();
   }
+
+  //emit imasignal();
 
   return fileName;
 }
@@ -358,7 +360,6 @@ void GLWindow::drawNodes(network _Network)
       if((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
          (_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
       {
-//        std::cout<<Parser.ways[i].nodesInWay[j - 1].nodeRef<<"\n";
         X0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
         Y0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
         X1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
@@ -379,10 +380,6 @@ void GLWindow::drawNodes(network _Network)
         glPopMatrix();
 
       }
-
-
-        //std::cout<<((Parser.nodes[Parser.ways[i].nodesInWay[j]].nodeLat-Parser.minLat)/latInterval) * 100<<"\n";
-
     }
 
   }

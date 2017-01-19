@@ -8,7 +8,7 @@
 #include "XMLParser.h"
 #include "OBJWrite.h"
 
-class GLWindow : public QOpenGLWidget//public QOpenGLWindow
+class GLWindow : public QOpenGLWidget
 {
   Q_OBJECT
   public:
@@ -28,6 +28,9 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
     void useOriginalNetwork(bool);
     void useNewNetwork(bool);
     QString openFileBrowser(bool);
+
+signals:
+  //void imasignal();
 
   private:
     float m_y;
