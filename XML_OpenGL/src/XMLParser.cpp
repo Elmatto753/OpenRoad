@@ -239,10 +239,10 @@ void XMLParse::checkIntersections()
       }
       if(Network.ways[i].nodesInWay[j].intersectsWith.size() != 0)
       {
-        std::cout<<"node "<<Network.ways[i].nodesInWay[j].nodeRef<<" is in "<<Network.ways[i].name<<", has "<<Network.ways[i].nodesInWay[j].numIntersections<<" intersections and intersects with:\n";
+        //std::cout<<"node "<<Network.ways[i].nodesInWay[j].nodeRef<<" is in "<<Network.ways[i].name<<", has "<<Network.ways[i].nodesInWay[j].numIntersections<<" intersections and intersects with:\n";
         for(uint m = 0; m < Network.ways[i].nodesInWay[j].intersectsWith.size(); m++)
         {
-          std::cout<<Network.ways[i].nodesInWay[j].intersectsWith[m]<<"\n";
+          //std::cout<<Network.ways[i].nodesInWay[j].intersectsWith[m]<<"\n";
         }
       }
 

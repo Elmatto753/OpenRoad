@@ -36,6 +36,7 @@ signals:
     float m_y;
     void timerEvent(QTimerEvent *);
     node findNextnode(node CurrentNode, node PrevNode);
+    void analyseNetwork(network Network);
     XMLParse Parser;
     OBJWrite Writer;
     network NewNetwork;

@@ -386,136 +386,185 @@ void GLWindow::drawNodes(network _Network)
   }
 }
 
-void GLWindow::createNewNetwork(bool)
+void GLWindow::analyseNetwork(network Network)
 {
-  for(uint i = 0; i < Parser.Network.nodes.size(); i++)
+  uint totIntersections = 0;
+  uint maxIntersections = 0;
+  uint minIntersections = 0;
+  float totAngle = 0.0f;
+  float maxAngle = 0.0f;
+  float minAngle = 2 * M_PI;
+
+  for(uint i = 0; i < Network.ways.size(); i++)
   {
-    Parser.Network.nodes[i].inNewNetwork = false;
-    NewNetwork.nodes.push_back(Parser.Network.nodes[i]);
-  }
-  float intersectionUseAgain = 0.0f;
-  NewNetwork.currentWay.wayRef = 0;
-  NewNetwork.currentNode = NewNetwork.nodes[0];
-  NewNetwork.currentNode.inNewNetwork = true;
-  NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
-  NewNetwork.currentNode = NewNetwork.nodes[1];
-  NewNetwork.currentNode.inNewNetwork = true;
-  NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
-  bool unusedNodes = true;
-  node prevNode = NewNetwork.nodes[0];
-  while(unusedNodes == true)
-  {
-    unusedNodes = false;
-    for(uint j = 0; j < NewNetwork.nodes.size(); j++)
+    if(Network.ways[i].intersections.size() > maxIntersections)
     {
-      if(NewNetwork.nodes[j].inNewNetwork == true)
+      maxIntersections = Network.ways[i].intersections.size();
+    }
+    totIntersections += Network.ways[i].intersections.size();
+
+    for(uint j = 1; j < Network.ways[i].nodesInWay.size() - 1; j++)
+    {
+      float magToPrev = sqrt((Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat)*(Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat) +
+                             (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon)*(Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon));
+      float magToNext = sqrt((Network.ways[i].nodesInWay[j+1].nodeLat - Network.ways[i].nodesInWay[j].nodeLat)*(Network.ways[i].nodesInWay[j+1].nodeLat - Network.ways[i].nodesInWay[j].nodeLat) +
+                             (Network.ways[i].nodesInWay[j+1].nodeLon - Network.ways[i].nodesInWay[j].nodeLon)*(Network.ways[i].nodesInWay[j+1].nodeLon - Network.ways[i].nodesInWay[j].nodeLon));
+      float prevNormLat = (Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat) / magToPrev;
+      float prevNormLon = (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon) / magToPrev;
+      float curNormLat = (Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j+1].nodeLat) / magToNext;
+      float curNormLon = (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j+1].nodeLon) / magToNext;
+      float angle = acos(prevNormLat * curNormLat + prevNormLon * curNormLon);
+      totAngle += angle;
+      if(angle > maxAngle)
       {
-        continue;
+        maxAngle = angle;
       }
-      else
+      if(angle < minAngle)
       {
-        unusedNodes = true;
-        node temp = NewNetwork.currentNode;
-        NewNetwork.currentNode = findNextnode(NewNetwork.currentNode, prevNode);
-        prevNode = temp;
-        if(NewNetwork.currentNode.isNull == true)
-        {
-          NewNetwork.ways.push_back(NewNetwork.currentWay);
-          NewNetwork.currentWay.nodesInWay.clear();
-          NewNetwork.currentWay.wayRef++;
-          for(uint k = 0; k < NewNetwork.nodes.size(); k++)
-          {
-            if(NewNetwork.nodes[k].inNewNetwork == false)
-            {
-              NewNetwork.currentNode = NewNetwork.nodes[k];
-              NewNetwork.currentNode.inNewNetwork = true;
-              break;
-            }
-          }
-        }
-        prevNode.numIntersections++;
-        NewNetwork.currentNode.numIntersections++;
-        NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
+        minAngle = angle;
       }
     }
   }
+
+  uint avgIntersections = totIntersections / Network.ways.size();
+  uint avgNodes = Network.nodes.size() / Network.ways.size();
+  float avgAngle = totAngle / Network.nodes.size();
+  std::cout<<"\navgInt: "<<avgIntersections<<" avgNodes: "<<avgNodes<<" avgAngle: "<<avgAngle<<"\n";
+
+
+}
+
+void GLWindow::createNewNetwork(bool)
+{
+  analyseNetwork(Parser.Network);
+//  for(uint i = 0; i < Parser.Network.nodes.size(); i++)
+//  {
+//    Parser.Network.nodes[i].inNewNetwork = false;
+//    NewNetwork.nodes.push_back(Parser.Network.nodes[i]);
+//  }
+//  float intersectionUseAgain = 0.0f;
+//  NewNetwork.currentWay.wayRef = 0;
+//  NewNetwork.currentNode = NewNetwork.nodes[0];
+//  NewNetwork.currentNode.inNewNetwork = true;
+//  NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
+//  NewNetwork.currentNode = NewNetwork.nodes[1];
+//  NewNetwork.currentNode.inNewNetwork = true;
+//  NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
+//  bool unusedNodes = true;
+//  node prevNode = NewNetwork.nodes[0];
+//  while(unusedNodes == true)
+//  {
+//    unusedNodes = false;
+//    for(uint j = 0; j < NewNetwork.nodes.size(); j++)
+//    {
+//      if(NewNetwork.nodes[j].inNewNetwork == true)
+//      {
+//        continue;
+//      }
+//      else
+//      {
+//        unusedNodes = true;
+//        node temp = NewNetwork.currentNode;
+//        NewNetwork.currentNode = findNextnode(NewNetwork.currentNode, prevNode);
+//        prevNode = temp;
+//        if(NewNetwork.currentNode.isNull == true)
+//        {
+//          NewNetwork.ways.push_back(NewNetwork.currentWay);
+//          NewNetwork.currentWay.nodesInWay.clear();
+//          NewNetwork.currentWay.wayRef++;
+//          for(uint k = 0; k < NewNetwork.nodes.size(); k++)
+//          {
+//            if(NewNetwork.nodes[k].inNewNetwork == false)
+//            {
+//              NewNetwork.currentNode = NewNetwork.nodes[k];
+//              NewNetwork.currentNode.inNewNetwork = true;
+//              break;
+//            }
+//          }
+//        }
+//        prevNode.numIntersections++;
+//        NewNetwork.currentNode.numIntersections++;
+//        NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
+//      }
+//    }
+//  }
 }
 
 node GLWindow::findNextnode(node CurrentNode, node PrevNode)
 {
-  node temp[5];
-  float len;
-  float tempLen[5];
-  for(uint i = 0; i < NewNetwork.nodes.size(); i++)
-  {
-    bool isInWay = false;
-    if(NewNetwork.nodes[i].nodeID != CurrentNode.nodeID)
-    {
-      for(uint x = 0; x < NewNetwork.currentWay.nodesInWay.size(); x++)
-      {
-        if(NewNetwork.nodes[i].nodeID == NewNetwork.currentWay.nodesInWay[x].nodeID)
-        {
-          isInWay = true;
-          break;
-        }
-      }
-      if(isInWay == true)
-      {
-        isInWay = false;
-        continue;
-      }
-      len = (sqrt((CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat)*(CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat) + (CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)*(CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)));
-      for(int j = 0; j < 5; j++)
-      {
-        tempLen[j] = (sqrt((CurrentNode.nodeLat - temp[j].nodeLat)*(CurrentNode.nodeLat - temp[j].nodeLat) + (CurrentNode.nodeLon - temp[j].nodeLon)*(CurrentNode.nodeLon - temp[j].nodeLon)));
-        if(len < tempLen[j])
-        {
-          for(int y = j; y < 4; y++)
-          {
-            temp[y+1] = temp[y];
-          }
-          temp[j] = Parser.Network.nodes[i];
-          break;
+//  node temp[5];
+//  float len;
+//  float tempLen[5];
+//  for(uint i = 0; i < NewNetwork.nodes.size(); i++)
+//  {
+//    bool isInWay = false;
+//    if(NewNetwork.nodes[i].nodeID != CurrentNode.nodeID)
+//    {
+//      for(uint x = 0; x < NewNetwork.currentWay.nodesInWay.size(); x++)
+//      {
+//        if(NewNetwork.nodes[i].nodeID == NewNetwork.currentWay.nodesInWay[x].nodeID)
+//        {
+//          isInWay = true;
+//          break;
+//        }
+//      }
+//      if(isInWay == true)
+//      {
+//        isInWay = false;
+//        continue;
+//      }
+//      len = (sqrt((CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat)*(CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat) + (CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)*(CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)));
+//      for(int j = 0; j < 5; j++)
+//      {
+//        tempLen[j] = (sqrt((CurrentNode.nodeLat - temp[j].nodeLat)*(CurrentNode.nodeLat - temp[j].nodeLat) + (CurrentNode.nodeLon - temp[j].nodeLon)*(CurrentNode.nodeLon - temp[j].nodeLon)));
+//        if(len < tempLen[j])
+//        {
+//          for(int y = j; y < 4; y++)
+//          {
+//            temp[y+1] = temp[y];
+//          }
+//          temp[j] = Parser.Network.nodes[i];
+//          break;
 
-        }
-      }
-    }
-  }
-  for(uint k = 0; k < 5; k++)
-  {
-    for(uint l = 0; l < NewNetwork.currentWay.nodesInWay.size(); l++)
-    {
-      if(temp[k].nodeRef == NewNetwork.currentWay.nodesInWay[l].nodeRef)
-      {
-        if(k == 4)
-        {
-          return nullNode;
-        }
-        k++;
-        l = 0;
-      }
-    }
-    if(temp[k].numIntersections == 4)
-    {
+//        }
+//      }
+//    }
+//  }
+//  for(uint k = 0; k < 5; k++)
+//  {
+//    for(uint l = 0; l < NewNetwork.currentWay.nodesInWay.size(); l++)
+//    {
+//      if(temp[k].nodeRef == NewNetwork.currentWay.nodesInWay[l].nodeRef)
+//      {
+//        if(k == 4)
+//        {
+//          return nullNode;
+//        }
+//        k++;
+//        l = 0;
+//      }
+//    }
+//    if(temp[k].numIntersections == 4)
+//    {
 
-      continue;
-    }
-    float mag = sqrt((CurrentNode.nodeLat - PrevNode.nodeLat)*(CurrentNode.nodeLat - PrevNode.nodeLat) + (CurrentNode.nodeLon - PrevNode.nodeLon)*(CurrentNode.nodeLon - PrevNode.nodeLon));
-    float tNormLat = (CurrentNode.nodeLat - temp[k].nodeLat) / tempLen[k];
-    float tNormLon = (CurrentNode.nodeLon - temp[k].nodeLon) / tempLen[k];
-    float cNormLat = (CurrentNode.nodeLat - PrevNode.nodeLat) / mag;
-    float cNormLon = (CurrentNode.nodeLon - PrevNode.nodeLon) / mag;
+//      continue;
+//    }
+//    float mag = sqrt((CurrentNode.nodeLat - PrevNode.nodeLat)*(CurrentNode.nodeLat - PrevNode.nodeLat) + (CurrentNode.nodeLon - PrevNode.nodeLon)*(CurrentNode.nodeLon - PrevNode.nodeLon));
+//    float tNormLat = (CurrentNode.nodeLat - temp[k].nodeLat) / tempLen[k];
+//    float tNormLon = (CurrentNode.nodeLon - temp[k].nodeLon) / tempLen[k];
+//    float cNormLat = (CurrentNode.nodeLat - PrevNode.nodeLat) / mag;
+//    float cNormLon = (CurrentNode.nodeLon - PrevNode.nodeLon) / mag;
 
-    if(acos(tNormLat * cNormLat + tNormLon * cNormLon) < 0.523599)
-    {
-      continue;
-    }
+//    if(acos(tNormLat * cNormLat + tNormLon * cNormLon) < 0.523599)
+//    {
+//      continue;
+//    }
 
-    // TODO: Check if this would cross over existing road
+//    // TODO: Check if this would cross over existing road
 
-    temp[k].inNewNetwork = true;
-    return temp[k];
+//    temp[k].inNewNetwork = true;
+//    return temp[k];
 
-  }
-  return nullNode;
+//  }
+//  return nullNode;
 }
