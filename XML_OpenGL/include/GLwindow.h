@@ -17,13 +17,16 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
     void initializeGL();
     void resizeGL(int _w, int _h);
     void paintGL();
-    void drawNodes();
+    void drawNodes(network _Network);
+    void OBJfill(network _Network);
 
   public slots:
     void test(bool);
     void slider(int);
     void outputToOBJ(bool);
     void createNewNetwork(bool);
+    void useOriginalNetwork(bool);
+    void useNewNetwork(bool);
     QString openFileBrowser(bool);
 
   private:
@@ -41,6 +44,9 @@ class GLWindow : public QOpenGLWidget//public QOpenGLWindow
     std::string toOBJ;
     float roadWidth;
     int verticeCount;
+
+    //allowing users a choice of which road system to use
+    int originalSystem;
 };
 
 #endif

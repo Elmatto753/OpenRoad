@@ -17,6 +17,7 @@ GLWindow::GLWindow(QWidget *_parent) :
 {
 //    setTitle("Simple GL Window");
     m_y=0.0f;
+    originalSystem=1;
 }
 
 GLWindow::~GLWindow()
@@ -43,7 +44,7 @@ QString GLWindow::openFileBrowser(bool)
   return fileName;
 }
 
-void GLWindow::outputToOBJ(bool)
+void GLWindow::OBJfill(network _Network)
 {
     lonInterval = Parser.maxLon-Parser.minLon;
     latInterval = Parser.maxLat-Parser.minLat;
@@ -55,10 +56,10 @@ void GLWindow::outputToOBJ(bool)
 
     Writer.clearOBJ();
 
-    for( uint i = 0; i<Parser.Network.ways.size(); i++)
+    for( uint i = 0; i<_Network.ways.size(); i++)
     {
         verticeCountWay=1;
-        for(uint j = 1; j<Parser.Network.ways[i].nodesInWay.size(); j++)
+        for(uint j = 1; j<_Network.ways[i].nodesInWay.size(); j++)
         {
             nodeCount+=1;
             //if all valid (e.g. not outliers) then push back node - NEED TO DO THIS STEP ON OUTPUT ie. WHEN POPULATING OBJ FILE
@@ -67,21 +68,21 @@ void GLWindow::outputToOBJ(bool)
             //{
                 //only if theres enough nodes in a way to make a face - theres a problem here with outliers, the original way may well
                 //have more than 1 node but when it goes through the next check not all nodes may make it through
-                if(Parser.Network.ways[i].nodesInWay.size()>1)
+                if(_Network.ways[i].nodesInWay.size()>1)
                 {
                     //NEW SYSTEM, CALCULATES HOW MUCH ROAD WIDTH TO ADD IN HORIZONTAL AND VERTICAL BASED ON DIFFERENCE IN LAT AND LONG BETWEEN TWO NODES
                     //for node first only - first two nodes will have same scalar affecting them, first two nodes setup occuring here
                     if(j==1)
                     {
                         std::stringstream name;
-                        name << "#" << Parser.Network.ways[i].name << "\n";
+                        name << "#" << _Network.ways[i].name << "\n";
                         toOBJ = name.str();
                         Writer.writeToOBJ(toOBJ);
                         toOBJ.clear();
-                        X0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
-                        X1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
                         float latDiff = X1-X0;
                         float lonDiff = Y1-Y0;
@@ -161,11 +162,11 @@ void GLWindow::outputToOBJ(bool)
                     else if(j>2)
                     {
                         //current node
-                        X1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
                         //prev node
-                        X0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 2].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-                        Y0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 2].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+                        X0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 2].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+                        Y0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 2].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
                         float latDiff = X1-X0;
                         float lonDiff = Y1-Y0;
@@ -236,6 +237,28 @@ void GLWindow::outputToOBJ(bool)
     toOBJ.clear();
 }
 
+void GLWindow::useOriginalNetwork(bool)
+{
+    originalSystem=1;
+}
+
+void GLWindow::useNewNetwork(bool)
+{
+    originalSystem=0;
+}
+
+void GLWindow::outputToOBJ(bool)
+{
+    if(originalSystem==1)
+    {
+        OBJfill(Parser.Network);
+    }
+    else if(originalSystem==0)
+    {
+        OBJfill(NewNetwork);
+    }
+}
+
 void GLWindow::initializeGL()
 {
     glClearColor(0.6,  0.6, 0.6, 1.0);
@@ -246,10 +269,6 @@ void GLWindow::initializeGL()
     glLoadIdentity();
     gluLookAt(0,0,-120,0,0,0,0,1,0);
     startTimer(1);
-
-
-    std::cout<<"time to parse some shit\n";
-//    Parser.parseXML("data/NY");
 }
 
 void GLWindow::resizeGL(int _w, int _h)
@@ -308,7 +327,14 @@ void GLWindow::paintGL()
     glEnd();
     glPopMatrix();
 
-    drawNodes();
+    if(originalSystem==1)
+    {
+        drawNodes(Parser.Network);
+    }
+    else if(originalSystem==0)
+    {
+        drawNodes(NewNetwork);
+    }
 
 }
 
@@ -317,26 +343,26 @@ void GLWindow::timerEvent(QTimerEvent *)
     update();
 }
 
-void GLWindow::drawNodes()
+void GLWindow::drawNodes(network _Network)
 {
   lonInterval = Parser.maxLon-Parser.minLon;
   latInterval = Parser.maxLat-Parser.minLat;
 
   glPointSize(3.0f);
 
-  for( uint i = 0; i<Parser.Network.ways.size(); i++)
+  for( uint i = 0; i<_Network.ways.size(); i++)
   {
-    for(uint j = 1; j<Parser.Network.ways[i].nodesInWay.size(); j++)
+    for(uint j = 1; j<_Network.ways[i].nodesInWay.size(); j++)
     {
       //if all valid (e.g. not outliers) then push back node
-      if((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
-         (Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
+      if((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
+         (_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
       {
 //        std::cout<<Parser.ways[i].nodesInWay[j - 1].nodeRef<<"\n";
-        X0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y0 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
-        X1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
-        Y1 = ((Parser.Network.nodes[Parser.Network.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
+        X1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
+        Y1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
 
         glPushMatrix();
           glRotatef(90.0, 0.0, 0.0, 1.0);
