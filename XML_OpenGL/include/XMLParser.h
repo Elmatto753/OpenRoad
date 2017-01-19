@@ -18,6 +18,7 @@ struct node
     float nodeLon;
     bool isIntersection = false;
     bool inNewNetwork = false;
+    bool isNull = false;
     uint numIntersections = 0;
     std::vector<std::string> intersectsWith;
     std::map<uint, node *> next;

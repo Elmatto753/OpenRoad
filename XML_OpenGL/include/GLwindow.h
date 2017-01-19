@@ -40,6 +40,7 @@ signals:
     OBJWrite Writer;
     network NewNetwork;
     QString fileName;
+    node nullNode;
     bool OBJwritten = false;
     float lonInterval = Parser.maxLon-Parser.minLon;
     float latInterval = Parser.maxLat-Parser.minLat;

@@ -18,6 +18,7 @@ GLWindow::GLWindow(QWidget *_parent) :
     m_y=0.0f;
     //NEED TO CHANGE TO 0, MEANS DEFAULT WILL BE TO HAVE THE NEW SYSTEM SELECTED FOR DRAWING
     originalSystem=1;
+    nullNode.isNull = true;
 }
 
 GLWindow::~GLWindow()
@@ -390,31 +391,50 @@ void GLWindow::createNewNetwork(bool)
   for(uint i = 0; i < Parser.Network.nodes.size(); i++)
   {
     Parser.Network.nodes[i].inNewNetwork = false;
+    NewNetwork.nodes.push_back(Parser.Network.nodes[i]);
   }
   float intersectionUseAgain = 0.0f;
-  NewNetwork.currentNode = Parser.Network.nodes[0];
-  NewNetwork.currentWay.nodesInWay.push_back(Parser.Network.nodes[0]);
+  NewNetwork.currentWay.wayRef = 0;
+  NewNetwork.currentNode = NewNetwork.nodes[0];
   NewNetwork.currentNode.inNewNetwork = true;
-  NewNetwork.currentNode = Parser.Network.nodes[1];
-  NewNetwork.currentWay.nodesInWay.push_back(Parser.Network.nodes[1]);
+  NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
+  NewNetwork.currentNode = NewNetwork.nodes[1];
+  NewNetwork.currentNode.inNewNetwork = true;
+  NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
   bool unusedNodes = true;
-  node prevNode = Parser.Network.nodes[0];
+  node prevNode = NewNetwork.nodes[0];
   while(unusedNodes == true)
   {
     unusedNodes = false;
-    for(uint j = 0; j <Parser.Network.nodes.size(); j++)
+    for(uint j = 0; j < NewNetwork.nodes.size(); j++)
     {
-      if(Parser.Network.nodes[j].inNewNetwork == true)
+      if(NewNetwork.nodes[j].inNewNetwork == true)
       {
         continue;
       }
       else
       {
-        NewNetwork.currentNode.inNewNetwork = true;
         unusedNodes = true;
         node temp = NewNetwork.currentNode;
         NewNetwork.currentNode = findNextnode(NewNetwork.currentNode, prevNode);
         prevNode = temp;
+        if(NewNetwork.currentNode.isNull == true)
+        {
+          NewNetwork.ways.push_back(NewNetwork.currentWay);
+          NewNetwork.currentWay.nodesInWay.clear();
+          NewNetwork.currentWay.wayRef++;
+          for(uint k = 0; k < NewNetwork.nodes.size(); k++)
+          {
+            if(NewNetwork.nodes[k].inNewNetwork == false)
+            {
+              NewNetwork.currentNode = NewNetwork.nodes[k];
+              NewNetwork.currentNode.inNewNetwork = true;
+              break;
+            }
+          }
+        }
+        prevNode.numIntersections++;
+        NewNetwork.currentNode.numIntersections++;
         NewNetwork.currentWay.nodesInWay.push_back(NewNetwork.currentNode);
       }
     }
@@ -426,14 +446,14 @@ node GLWindow::findNextnode(node CurrentNode, node PrevNode)
   node temp[5];
   float len;
   float tempLen[5];
-  for(uint i = 0; i < Parser.Network.nodes.size(); i++)
+  for(uint i = 0; i < NewNetwork.nodes.size(); i++)
   {
     bool isInWay = false;
-    if(Parser.Network.nodes[i].nodeRef != CurrentNode.nodeRef)
+    if(NewNetwork.nodes[i].nodeID != CurrentNode.nodeID)
     {
       for(uint x = 0; x < NewNetwork.currentWay.nodesInWay.size(); x++)
       {
-        if(Parser.Network.nodes[i].nodeRef == NewNetwork.currentWay.nodesInWay[x].nodeRef)
+        if(NewNetwork.nodes[i].nodeID == NewNetwork.currentWay.nodesInWay[x].nodeID)
         {
           isInWay = true;
           break;
@@ -442,7 +462,7 @@ node GLWindow::findNextnode(node CurrentNode, node PrevNode)
       if(isInWay == true)
       {
         isInWay = false;
-        break;
+        continue;
       }
       len = (sqrt((CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat)*(CurrentNode.nodeLat - Parser.Network.nodes[i].nodeLat) + (CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)*(CurrentNode.nodeLon - Parser.Network.nodes[i].nodeLon)));
       for(int j = 0; j < 5; j++)
@@ -450,7 +470,7 @@ node GLWindow::findNextnode(node CurrentNode, node PrevNode)
         tempLen[j] = (sqrt((CurrentNode.nodeLat - temp[j].nodeLat)*(CurrentNode.nodeLat - temp[j].nodeLat) + (CurrentNode.nodeLon - temp[j].nodeLon)*(CurrentNode.nodeLon - temp[j].nodeLon)));
         if(len < tempLen[j])
         {
-          for(int y = j; y < 5; y++)
+          for(int y = j; y < 4; y++)
           {
             temp[y+1] = temp[y];
           }
@@ -463,8 +483,21 @@ node GLWindow::findNextnode(node CurrentNode, node PrevNode)
   }
   for(uint k = 0; k < 5; k++)
   {
-    if(NewNetwork.nodes[temp[k].nodeRef].numIntersections == 4)
+    for(uint l = 0; l < NewNetwork.currentWay.nodesInWay.size(); l++)
     {
+      if(temp[k].nodeRef == NewNetwork.currentWay.nodesInWay[l].nodeRef)
+      {
+        if(k == 4)
+        {
+          return nullNode;
+        }
+        k++;
+        l = 0;
+      }
+    }
+    if(temp[k].numIntersections == 4)
+    {
+
       continue;
     }
     float mag = sqrt((CurrentNode.nodeLat - PrevNode.nodeLat)*(CurrentNode.nodeLat - PrevNode.nodeLat) + (CurrentNode.nodeLon - PrevNode.nodeLon)*(CurrentNode.nodeLon - PrevNode.nodeLon));
@@ -480,9 +513,9 @@ node GLWindow::findNextnode(node CurrentNode, node PrevNode)
 
     // TODO: Check if this would cross over existing road
 
+    temp[k].inNewNetwork = true;
     return temp[k];
 
   }
-
-  exit(0);
+  return nullNode;
 }
