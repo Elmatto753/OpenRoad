@@ -54,6 +54,8 @@ signals:
     uint avgIntersections;
     uint avgNodes;
     float avgDistance;
+    float minDistance;
+    float maxDistance;
     float avgAngle;
     float maxAngle;
     float minAngle;

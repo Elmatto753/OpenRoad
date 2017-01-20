@@ -267,7 +267,7 @@ void GLWindow::initializeGL()
 {
     glClearColor(0.6,  0.6, 0.6, 1.0);
     glMatrixMode(GL_PROJECTION);
-    gluPerspective(65,float(width()/height()),0.1,1000);
+    gluPerspective(75,float(width()/height()),0.1,1000);
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_NORMALIZE);
     glLoadIdentity();
@@ -359,9 +359,9 @@ void GLWindow::drawNodes(network _Network)
     for(uint j = 1; j<_Network.ways[i].nodesInWay.size(); j++)
     {
       //if all valid (e.g. not outliers) then push back node
-      if((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
-         (_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
-      {
+//      if((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat>=Parser.minLat)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat<=Parser.maxLat)&&
+//         (_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon>=Parser.minLon)&&(_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLon<=Parser.maxLon))
+//      {
         X0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
         Y0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.minLon)/lonInterval) * 100;
         X1 = ((_Network.nodes[_Network.ways[i].nodesInWay[j].nodeRef].nodeLat-Parser.minLat)/latInterval) * 100;
@@ -381,7 +381,7 @@ void GLWindow::drawNodes(network _Network)
           glEnd();
         glPopMatrix();
 
-      }
+//      }
     }
 
   }
@@ -396,6 +396,9 @@ void GLWindow::analyseNetwork(network Network)
   float totAngle = 0.0f;
   maxAngle = 0.0f;
   minAngle = 2 * M_PI;
+  minDistance = 1.0f;
+  maxDistance = 0.0f;
+  uint distDivisor = 0;
   float distance=0.0f;
 
   for(uint i = 0; i < Network.ways.size(); i++)
@@ -428,15 +431,24 @@ void GLWindow::analyseNetwork(network Network)
       {
         minAngle = angle;
       }
+      if(magToPrev > maxDistance)
+      {
+        maxDistance = magToPrev;
+      }
+      if(magToPrev < minDistance)
+      {
+        minDistance = magToPrev;
+      }
       distance+=magToPrev;
     }
   }
 
   avgIntersections = totIntersections / Network.ways.size();
   avgNodes = Network.nodes.size() / Network.ways.size();
-  avgDistance = distance/Network.nodes.size();
+  avgDistance = distance/angleCount;
   avgAngle = totAngle / angleCount;
   std::cout<<"\navgInt: "<<avgIntersections<<" avgNodes: "<<avgNodes<<" avgDistance: "<<avgDistance<<"\n";
+  std::cout<<"mindist: "<<minDistance<<" maxdist: "<<maxDistance<<"\n";
   std::cout<<"avgAngle: "<<avgAngle<<" minAngle: "<<minAngle<<" maxAngle: "<<maxAngle<<"\n";
 
 }
@@ -444,7 +456,7 @@ void GLWindow::analyseNetwork(network Network)
 //using values analyzed from original graph with random permutations - SORRY IT CRASHES
 void GLWindow::extendNetwork()
 {
-  uint node_Ref;
+  uint node_Ref = Parser.Network.nodes.size();
   uint way_Ref;
   uint numberOfNodes;
   //keep track of how many nodes and intersection points already used
@@ -453,102 +465,112 @@ void GLWindow::extendNetwork()
   bool intersectPoint=false;
 
   //start checking for an unfinished node
-    for( uint i = 0; i<Parser.NewNetwork.ways.size(); i++)
+  for( uint i = 0; i<Parser.NewNetwork.ways.size(); i++)
+  {
+    for(uint j = 1; j<Parser.NewNetwork.ways[i].nodesInWay.size(); j++)
     {
-      for(uint j = 1; j<Parser.NewNetwork.ways[i].nodesInWay.size(); j++)
+      //need to be editing the latest way added, so this should always update itself when a way is pushed back
+      way_Ref=Parser.NewNetwork.ways.size();//potentially needs to be plus 1
+      //when one is reached
+      if(Parser.NewNetwork.ways[i].nodesInWay[j].isUnfinished==true)
       {
-        //need to be editing the latest way added, so this should always update itself when a way is pushed back
-        way_Ref=Parser.NewNetwork.ways.size();//potentially needs to be plus 1
-        //when one is reached
-        if(Parser.NewNetwork.ways[i].nodesInWay[j].isUnfinished==true)
+        Parser.NewNetwork.ways[i].nodesInWay[j].isUnfinished=false;
+        //reset for next way used to keep track of how many nodes and intersections already added
+        nodesInWay=0;
+        interInWay=0;
+        //push back new way, generate random number of intersections and nodes for this new way to have
+        way emptyWay;
+        Parser.NewNetwork.ways.push_back(emptyWay);
+
+        int randomNodes = rand() % 11 + (-5);
+        int randomIntersection = rand() % 2 + (-1);
+        float randomLength = minDistance + ( (((float) rand()) / (float) RAND_MAX) * (maxDistance - minDistance) );
+        float randomAngle = minAngle + ( (((float) rand()) / (float) RAND_MAX) * (maxAngle - minAngle) );
+        //length = avgDistance + ((-0.5 + ((((float) rand()) / (float) RAND_MAX) )) * randomLength);
+        numberOfNodes=avgNodes+randomNodes;
+        uint numberOfIntersections=avgIntersections+randomIntersection;
+
+
+        //push back nodes one at a time then for each node (loop through the number of nodes in this new way)
+        for(uint k=0; k<numberOfNodes; k++)
         {
-            Parser.NewNetwork.ways[i].nodesInWay[j].isUnfinished=false;
-            //reset for next way used to keep track of how many nodes and intersections already added
-            nodesInWay=0;
-            interInWay=0;
-            //push back new way, generate random number of intersections and nodes for this new way to have
-            way emptyWay;
-            Parser.NewNetwork.ways.push_back(emptyWay);
+          node emptyNode;
 
-            int randomNodes = rand() % 11 + (-5);
-            int randomIntersection = rand() % 2 + (-1);
-            numberOfNodes=avgNodes+randomNodes;
-            uint numberOfIntersections=avgIntersections+randomIntersection;
+          Parser.NewNetwork.ways[way_Ref].nodesInWay.push_back(emptyNode);
 
-            //push back nodes one at a time then for each node (loop through the number of nodes in this new way)
-            for(uint k=0; k<numberOfNodes; k++)
+          node_Ref+=1;
+          //for first node it should always equal position of original unfinished node and shouldn't be an intersection
+          if(k==0)
+          {
+            Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLat=Parser.NewNetwork.ways[i].nodesInWay[j].nodeLat;
+            Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLon=Parser.NewNetwork.ways[i].nodesInWay[j].nodeLon;
+
+            Parser.NewNetwork.ways[way_Ref].nodesInWay[k].isIntersection=false;
+
+            nodesInWay+=1;
+          }
+          else
+          {
+            //NODE NEW POSITION CALCULATIONS - NEED TO WORK OUT BASED ON AVERAGE ANGLE AND AVERAGE DISTANCE
+            float lat=0.0f, lon=0.0f;
+
+            lat = Parser.NewNetwork.ways[way_Ref].nodesInWay[k-1].nodeLat + randomLength * cos(randomAngle);
+            lon = Parser.NewNetwork.ways[way_Ref].nodesInWay[k-1].nodeLon + randomLength * cos((M_PI/2) - randomAngle);
+            //std::cout<<"lat: "<<lat<<" lon: "<<lon<<"\n";
+
+            //calcualte node position based on average angle (to give vector) and average distance to give final lat and long
+
+            Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLat=lat;
+            Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLon=lon;
+
+            //INTERSECTION POINT DECIDING
+            //if intersection quota has already been filled for this way
+            if(interInWay==numberOfIntersections)
             {
-                node emptyNode;
-                Parser.NewNetwork.nodes.push_back(emptyNode);
-                node_Ref=Parser.NewNetwork.currentNode.nodeRef;
-                node_Ref+=1;
-                //for first node it should always equal position of original unfinished node and shouldn't be an intersection
-                if(k==0)
-                {
-                    Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLat=Parser.NewNetwork.ways[i].nodesInWay[j].nodeLat;
-                    Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLon=Parser.NewNetwork.ways[i].nodesInWay[j].nodeLon;
-
-                    Parser.NewNetwork.currentNode.isIntersection=false;
-
-                    nodesInWay+=1;
-                }
-                else
-                {
-                    //NODE NEW POSITION CALCULATIONS - NEED TO WORK OUT BASED ON AVERAGE ANGLE AND AVERAGE DISTANCE
-                    float lat=0.0f, lon=0.0f;
-
-                    //calcualte node position based on average angle (to give vector) and average distance to give final lat and long
-
-                    Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLat=lat;
-                    Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeLon=lon;
-
-                    //INTERSECTION POINT DECIDING
-                    //if intersection quota has already been filled for this way
-                    if(interInWay==numberOfIntersections)
-                    {
-                        intersectPoint=false;
-                    }
-                    //already filled up normal node quota - has to be an intersect Node
-                    else if(nodesInWay==(numberOfNodes-numberOfIntersections))
-                    {
-                        intersectPoint=true;
-                    }
-                    //neither quota filled up, random choice of what the decision will be
-                    else
-                    {
-                        int randomiser = rand() % 2;
-                        if(randomiser==0)
-                        {
-                            intersectPoint=true;
-                        }
-                        else if(randomiser==1)
-                        {
-                            intersectPoint=false;
-                        }
-                    }
-
-                    //decide whether node is intersection or not
-                    if(intersectPoint==true)
-                    {
-                        //Parser.NewNetwork.currentNode.isIntersection=true;
-                        Parser.NewNetwork.ways[way_Ref].nodesInWay[k].isIntersection=true;
-                        interInWay+=1;
-                    }
-                    else if(intersectPoint==false)
-                    {
-                        //Parser.NewNetwork.currentNode.isIntersection=false;
-                        Parser.NewNetwork.ways[way_Ref].nodesInWay[k].isIntersection=false;
-                        nodesInWay+=1;
-                    }
-                }
-
-                //finally update node_ref count
-                Parser.NewNetwork.currentNode.nodeRef=node_Ref;
+                intersectPoint=false;
             }
+            //already filled up normal node quota - has to be an intersect Node
+            else if(nodesInWay==(numberOfNodes-numberOfIntersections))
+            {
+                intersectPoint=true;
+            }
+            //neither quota filled up, random choice of what the decision will be
+            else
+            {
+                int randomiser = rand() % 2;
+                if(randomiser==0)
+                {
+                    intersectPoint=true;
+                }
+                else if(randomiser==1)
+                {
+                    intersectPoint=false;
+                }
+            }
+
+            //decide whether node is intersection or not
+            if(intersectPoint==true)
+            {
+                //Parser.NewNetwork.currentNode.isIntersection=true;
+                Parser.NewNetwork.ways[way_Ref].nodesInWay[k].isIntersection=true;
+                interInWay+=1;
+            }
+            else if(intersectPoint==false)
+            {
+                //Parser.NewNetwork.currentNode.isIntersection=false;
+                Parser.NewNetwork.ways[way_Ref].nodesInWay[k].isIntersection=false;
+                nodesInWay+=1;
+            }
+          }
+
+          //finally update node_ref count
+          Parser.NewNetwork.ways[way_Ref].nodesInWay[k].nodeRef=node_Ref;
+          Parser.NewNetwork.nodes.push_back(Parser.NewNetwork.ways[way_Ref].nodesInWay[k]);
         }
       }
     }
-
+  }
+  //std::cout<<"\nNetwork size: "<<Parser.Network.ways.size()<<" NewNetwork size: "<<Parser.NewNetwork.ways.size()<<"\n";
 }
 
 void GLWindow::createNewNetwork(bool)
