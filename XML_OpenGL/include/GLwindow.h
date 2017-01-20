@@ -35,11 +35,12 @@ signals:
   private:
     float m_y;
     void timerEvent(QTimerEvent *);
-    node findNextnode(node CurrentNode, node PrevNode);
     void analyseNetwork(network Network);
+    void fillNetwork();
+    void extendNetwork();
+
     XMLParse Parser;
     OBJWrite Writer;
-    network NewNetwork;
     QString fileName;
     node nullNode;
     bool OBJwritten = false;
@@ -49,6 +50,13 @@ signals:
     std::string toOBJ;
     float roadWidth;
     int verticeCount;
+
+    uint avgIntersections;
+    uint avgNodes;
+    float avgDistance;
+    float avgAngle;
+    float maxAngle;
+    float minAngle;
 
     //allowing users a choice of which road system to use
     int originalSystem;

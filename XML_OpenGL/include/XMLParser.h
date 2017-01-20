@@ -19,6 +19,8 @@ struct node
     bool isIntersection = false;
     bool inNewNetwork = false;
     bool isNull = false;
+    //set any outlying nodes to unfinished (only the node at the end or beginning of the way)
+    bool isUnfinished = false;
     uint numIntersections = 0;
     std::vector<std::string> intersectsWith;
     std::map<uint, node *> next;
@@ -58,11 +60,13 @@ public :
   ~XMLParse();
 
   network Network;
+  network NewNetwork;
 
   typedef boost::tokenizer<boost::char_separator<char> >tokenizer;
 
   void parseXML( const std::string &_filename);
   void checkIntersections();
+  void unfinishedNodes();
 
   uint nodeRef = 0;
   uint wayRef = 0;

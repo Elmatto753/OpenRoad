@@ -27,6 +27,8 @@ void XMLParse::parseXML(const std::string &_filename)
   wayRef = 0;
   Network.nodes.clear();
   Network.ways.clear();
+  NewNetwork.nodes.clear();
+  NewNetwork.ways.clear();
   // Open XML file
   std::fstream fileIn;
   fileIn.open( _filename.c_str(), std::ios::in );
@@ -93,6 +95,7 @@ void XMLParse::parseXML(const std::string &_filename)
           {
             ss << *++tok_iter;
             ss >> Network.currentNode.nodeID;
+            ss >> NewNetwork.currentNode.nodeID;
           }
         }
 
@@ -103,6 +106,7 @@ void XMLParse::parseXML(const std::string &_filename)
 
           ++tok_iter;
           Network.currentNode.nodeLat=(boost::lexical_cast<float>( *tok_iter ));
+          NewNetwork.currentNode.nodeLat=(boost::lexical_cast<float>( *tok_iter ));
         }
 
         else if( *tok_iter == "lon" )
@@ -111,9 +115,12 @@ void XMLParse::parseXML(const std::string &_filename)
 
           Network.currentNode.nodeLon=(boost::lexical_cast<float>( *tok_iter ));
           Network.currentNode.nodeRef=nodeRef;
+          NewNetwork.currentNode.nodeLon=(boost::lexical_cast<float>( *tok_iter ));
+          NewNetwork.currentNode.nodeRef=nodeRef;
 
 
           Network.nodes.push_back(Network.currentNode);
+          NewNetwork.nodes.push_back(NewNetwork.currentNode);
           ++nodeRef;
         }
 
@@ -132,6 +139,7 @@ void XMLParse::parseXML(const std::string &_filename)
           std::stringstream ss;
           ss << *++tok_iter;
           ss >> Network.currentWay.wayID;
+          ss >> NewNetwork.currentWay.wayID;
         }
 
         else if( *tok_iter == "ref" && inWay == true )
@@ -146,9 +154,9 @@ void XMLParse::parseXML(const std::string &_filename)
             {
               //std::cout<<"i = "<<i<<"\n";
               Network.currentWay.nodesInWay.push_back( Network.nodes[i] );
+              NewNetwork.currentWay.nodesInWay.push_back( NewNetwork.nodes[i] );
               break;
             }
-
           }
 
         }
@@ -164,6 +172,7 @@ void XMLParse::parseXML(const std::string &_filename)
             }
           }
           ss >> Network.currentWay.name;
+          ss >> NewNetwork.currentWay.name;
         }
 
         else if ( *tok_iter == "highway" && inWay == true)
@@ -178,27 +187,36 @@ void XMLParse::parseXML(const std::string &_filename)
           {
             uint j;
             Network.currentWay.wayRef = wayRef;
+            NewNetwork.currentWay.wayRef = wayRef;
             // Building out a map of "next" nodes for each node in a way
             // "next" is mapped to a corresponding way, in case a node is in more than one way
             for(j = 1; j < Network.currentWay.nodesInWay.size(); j++)
             {
               Network.currentWay.nodesInWay[j - 1].next[Network.currentWay.wayRef] = &Network.currentWay.nodesInWay[j];
+              NewNetwork.currentWay.nodesInWay[j - 1].next[NewNetwork.currentWay.wayRef] = &NewNetwork.currentWay.nodesInWay[j];
             }
             // The final node in a way has a null next
             Network.currentWay.nodesInWay[j - 1].next[Network.currentWay.wayRef] = nullptr;
             Network.ways.push_back(Network.currentWay);
 
+            // The final node in a way has a null next
+            NewNetwork.currentWay.nodesInWay[j - 1].next[NewNetwork.currentWay.wayRef] = nullptr;
+            NewNetwork.ways.push_back(NewNetwork.currentWay);
+
             wayRef++;
           }
           Network.currentWay.nodesInWay.clear();
           Network.currentWay.name.clear();
+          NewNetwork.currentWay.nodesInWay.clear();
+          NewNetwork.currentWay.name.clear();
           storeWay = false;
         }
       }
     }
   }
 
-  std::cout<<"\n"<<wayRef<<"\n";
+  std::cout<<"way Ref: "<<wayRef<<"\n";
+  std::cout<<"node Ref: "<<nodeRef<<"\n";
 
   std::cout<<"minlat="<<minLat<<" minLon="<<minLon<<" maxlat="<<maxLat<<" maxLon="<<maxLon;
 
@@ -207,12 +225,39 @@ void XMLParse::parseXML(const std::string &_filename)
 
 }
 
+//check for unfinished nodes
+void XMLParse::unfinishedNodes()
+{
+    for(uint i = 0; i<Network.ways.size(); i++)
+    {
+        //only need to check first and last of a node, dont want to set all the nodes in between to unfinished
+        if(Network.ways[i].nodesInWay[0].nodeLat>maxLat||Network.ways[i].nodesInWay[0].nodeLat<minLat||
+           Network.ways[i].nodesInWay[0].nodeLon>maxLon||Network.ways[i].nodesInWay[0].nodeLon<minLon)
+        {
+            Network.ways[i].nodesInWay[0].isUnfinished=true;
+            NewNetwork.ways[i].nodesInWay[0].isUnfinished=true;
+            //std::cout<<"outlier beginning \n";
+        }
+        //Network.ways[i].nodesInWay.size() -1 = last node in way
+        else if(Network.ways[i].nodesInWay[Network.ways[i].nodesInWay.size()-1].nodeLat>maxLat||
+                Network.ways[i].nodesInWay[Network.ways[i].nodesInWay.size()-1].nodeLat<minLat||
+                Network.ways[i].nodesInWay[Network.ways[i].nodesInWay.size()-1].nodeLon>maxLon||
+                Network.ways[i].nodesInWay[Network.ways[i].nodesInWay.size()-1].nodeLon<minLon)
+        {
+            Network.ways[i].nodesInWay[Network.ways[i].nodesInWay.size()-1].isUnfinished=true;
+            NewNetwork.ways[i].nodesInWay[Network.ways[i].nodesInWay.size()-1].isUnfinished=true;
+            //std::cout<<"outlier end \n";
+        }
+    }
+}
+
+//check intersections
 void XMLParse::checkIntersections()
 {
   for(uint i = 0; i<Network.ways.size(); i++)
   {
     for(uint j = 0; j<Network.ways[i].nodesInWay.size(); j++)
-    {
+    {   
       for(uint k = 0; k<Network.ways.size(); k++)
       {
         if(i == k)
@@ -229,6 +274,11 @@ void XMLParse::checkIntersections()
               Network.ways[i].nodesInWay[j].numIntersections++;
               Network.ways[i].nodesInWay[j].intersectsWith.push_back(Network.ways[k].name);
               Network.ways[i].intersections.push_back(Network.ways[i].nodesInWay[j]);
+
+              NewNetwork.ways[i].nodesInWay[j].isIntersection = true;
+              NewNetwork.ways[i].nodesInWay[j].numIntersections++;
+              NewNetwork.ways[i].nodesInWay[j].intersectsWith.push_back(NewNetwork.ways[k].name);
+              NewNetwork.ways[i].intersections.push_back(NewNetwork.ways[i].nodesInWay[j]);
             }
             else
             {
