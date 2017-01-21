@@ -11,6 +11,7 @@
 #include "iostream"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 GLWindow::GLWindow(QWidget *_parent) :
   QOpenGLWidget(_parent)
@@ -420,8 +421,13 @@ void GLWindow::analyseNetwork(network Network)
       float curNormLat = (Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j+1].nodeLat) / magToNext;
       float curNormLon = (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j+1].nodeLon) / magToNext;
       float angle = acos(prevNormLat * curNormLat + prevNormLon * curNormLon);
-      totAngle += angle;
-      angleCount+=1;
+      //to stop errors
+      bool notANumberCheck=std::isnan(angle);
+      if(notANumberCheck==false)
+      {
+        totAngle += angle;
+        angleCount+=1;
+      }
       //updating min and max angle if bigger or smaller is found
       if(angle > maxAngle)
       {
@@ -456,6 +462,7 @@ void GLWindow::analyseNetwork(network Network)
 //using values analyzed from original graph with random permutations - SORRY IT CRASHES
 void GLWindow::extendNetwork()
 {
+  srand (time (NULL));
   uint node_Ref = Parser.Network.nodes.size();
   uint way_Ref;
   uint numberOfNodes;
@@ -484,12 +491,14 @@ void GLWindow::extendNetwork()
 
         int randomNodes = rand() % 11 + (-5);
         int randomIntersection = rand() % 2 + (-1);
-        float randomLength = minDistance + ( (((float) rand()) / (float) RAND_MAX) * (maxDistance - minDistance) );
-        float randomAngle = minAngle + ( (((float) rand()) / (float) RAND_MAX) * (maxAngle - minAngle) );
-        //length = avgDistance + ((-0.5 + ((((float) rand()) / (float) RAND_MAX) )) * randomLength);
+
+        //float randomLength = minDistance + ( (((float) rand()) / (float) RAND_MAX) * (maxDistance - minDistance) );
         numberOfNodes=avgNodes+randomNodes;
         uint numberOfIntersections=avgIntersections+randomIntersection;
 
+        //average angle for this way - make sure to clamp the answers to min and max of the respective fields
+        float randomLengthWay = avgDistance + (-avgDistance/2) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((avgDistance/2)-(-avgDistance/2))));
+        float randomAngleWay = avgAngle + (-avgAngle) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((avgAngle)-(-avgAngle))));
 
         //push back nodes one at a time then for each node (loop through the number of nodes in this new way)
         for(uint k=0; k<numberOfNodes; k++)
@@ -497,6 +506,10 @@ void GLWindow::extendNetwork()
           node emptyNode;
 
           Parser.NewNetwork.ways[way_Ref].nodesInWay.push_back(emptyNode);
+
+          //small random variation on overall way values - otherwise we just get straight lines
+          float randomLength = randomLengthWay + (-randomLengthWay/10) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((randomLengthWay/10)-(-randomLengthWay/10))));
+          float randomAngle = randomAngleWay + (-randomAngleWay/10) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((randomAngleWay/10)-(-randomAngleWay/10))));
 
           node_Ref+=1;
           //for first node it should always equal position of original unfinished node and shouldn't be an intersection
@@ -514,6 +527,7 @@ void GLWindow::extendNetwork()
             //NODE NEW POSITION CALCULATIONS - NEED TO WORK OUT BASED ON AVERAGE ANGLE AND AVERAGE DISTANCE
             float lat=0.0f, lon=0.0f;
 
+            //std::cout<<"new node: "<<k<<" distance added >"<<randomLength * cos(randomAngle)<<"\n";
             lat = Parser.NewNetwork.ways[way_Ref].nodesInWay[k-1].nodeLat + randomLength * cos(randomAngle);
             lon = Parser.NewNetwork.ways[way_Ref].nodesInWay[k-1].nodeLon + randomLength * cos((M_PI/2) - randomAngle);
             //std::cout<<"lat: "<<lat<<" lon: "<<lon<<"\n";
