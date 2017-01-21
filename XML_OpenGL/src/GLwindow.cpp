@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <random>
 
 GLWindow::GLWindow(QWidget *_parent) :
   QOpenGLWidget(_parent)
@@ -19,7 +20,6 @@ GLWindow::GLWindow(QWidget *_parent) :
     m_y=0.0f;
     //NEED TO CHANGE TO 0, MEANS DEFAULT WILL BE TO HAVE THE NEW SYSTEM SELECTED FOR DRAWING
     originalSystem=1;
-    nullNode.isNull = true;
 }
 
 GLWindow::~GLWindow()
@@ -394,12 +394,12 @@ void GLWindow::analyseNetwork(network Network)
   uint maxIntersections = 0;
   uint minIntersections = 0;
   uint angleCount = 0;
+  uint distCount = 0;
   float totAngle = 0.0f;
   maxAngle = 0.0f;
   minAngle = 2 * M_PI;
   minDistance = 1.0f;
   maxDistance = 0.0f;
-  uint distDivisor = 0;
   float distance=0.0f;
 
   for(uint i = 0; i < Network.ways.size(); i++)
@@ -410,20 +410,21 @@ void GLWindow::analyseNetwork(network Network)
     }
     totIntersections += Network.ways[i].intersections.size();
 
+    // calculating angle change between nodes
     for(uint j = 1; j < Network.ways[i].nodesInWay.size() - 1; j++)
     {
       float magToPrev = sqrt((Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat)*(Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat) +
                              (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon)*(Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon));
-      float magToNext = sqrt((Network.ways[i].nodesInWay[j+1].nodeLat - Network.ways[i].nodesInWay[j].nodeLat)*(Network.ways[i].nodesInWay[j+1].nodeLat - Network.ways[i].nodesInWay[j].nodeLat) +
-                             (Network.ways[i].nodesInWay[j+1].nodeLon - Network.ways[i].nodesInWay[j].nodeLon)*(Network.ways[i].nodesInWay[j+1].nodeLon - Network.ways[i].nodesInWay[j].nodeLon));
-      float prevNormLat = (Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat) / magToPrev;
-      float prevNormLon = (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon) / magToPrev;
-      float curNormLat = (Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j+1].nodeLat) / magToNext;
-      float curNormLon = (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j+1].nodeLon) / magToNext;
-      float angle = acos(prevNormLat * curNormLat + prevNormLon * curNormLon);
+      float magToNext = sqrt((Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j+1].nodeLat)*(Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j+1].nodeLat) +
+                             (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j+1].nodeLon)*(Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j+1].nodeLon));
+      float prevNormLat = (Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat);
+      float prevNormLon = (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon);
+      float curNormLat = (Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j+1].nodeLat);
+      float curNormLon = (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j+1].nodeLon);
+      float angle = acos((prevNormLat * curNormLat + prevNormLon * curNormLon)/(magToNext * magToPrev));
+
       //to stop errors
-      bool notANumberCheck=std::isnan(angle);
-      if(notANumberCheck==false)
+      if(std::isnan(angle)==false)
       {
         totAngle += angle;
         angleCount+=1;
@@ -446,12 +447,13 @@ void GLWindow::analyseNetwork(network Network)
         minDistance = magToPrev;
       }
       distance+=magToPrev;
+      distCount++;
     }
   }
 
   avgIntersections = totIntersections / Network.ways.size();
   avgNodes = Network.nodes.size() / Network.ways.size();
-  avgDistance = distance/angleCount;
+  avgDistance = distance/distCount;
   avgAngle = totAngle / angleCount;
   std::cout<<"\navgInt: "<<avgIntersections<<" avgNodes: "<<avgNodes<<" avgDistance: "<<avgDistance<<"\n";
   std::cout<<"mindist: "<<minDistance<<" maxdist: "<<maxDistance<<"\n";
@@ -489,16 +491,38 @@ void GLWindow::extendNetwork()
         way emptyWay;
         Parser.NewNetwork.ways.push_back(emptyWay);
 
-        int randomNodes = rand() % 11 + (-5);
-        int randomIntersection = rand() % 2 + (-1);
+        // rand() % (max - min +1) + min
+        std::mt19937 rng(time(NULL));
+        std::uniform_int_distribution<uint> gen(3, 14);
+        uint randomNodes = gen(rng);
+        std::uniform_int_distribution<uint> gen2(2, 5);
+        uint randomIntersection = gen2(rng);
 
         //float randomLength = minDistance + ( (((float) rand()) / (float) RAND_MAX) * (maxDistance - minDistance) );
         numberOfNodes=avgNodes+randomNodes;
         uint numberOfIntersections=avgIntersections+randomIntersection;
 
         //average angle for this way - make sure to clamp the answers to min and max of the respective fields
-        float randomLengthWay = avgDistance + (-avgDistance/2) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((avgDistance/2)-(-avgDistance/2))));
-        float randomAngleWay = avgAngle + (-avgAngle) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((avgAngle)-(-avgAngle))));
+        std::uniform_real_distribution<float> genLength(minDistance, maxDistance);
+        float randomLengthWay = avgDistance + (genLength(rng)/2);
+        if(randomLengthWay > maxDistance)
+        {
+          randomLengthWay = maxDistance;
+        }
+
+        else if(randomLengthWay < minDistance)
+        {
+          randomLengthWay = minDistance;
+        }
+        float randomAngleWay = avgAngle + (-avgAngle) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((maxAngle)-(-maxAngle))));
+        if(randomAngleWay > maxAngle)
+        {
+          randomAngleWay = maxAngle;
+        }
+        else if(randomAngleWay < minAngle)
+        {
+          randomAngleWay = minAngle;
+        }
 
         //push back nodes one at a time then for each node (loop through the number of nodes in this new way)
         for(uint k=0; k<numberOfNodes; k++)
@@ -508,7 +532,7 @@ void GLWindow::extendNetwork()
           Parser.NewNetwork.ways[way_Ref].nodesInWay.push_back(emptyNode);
 
           //small random variation on overall way values - otherwise we just get straight lines
-          float randomLength = randomLengthWay + (-randomLengthWay/10) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((randomLengthWay/10)-(-randomLengthWay/10))));
+          float randomLength = (randomLengthWay + (-randomLengthWay/10) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((randomLengthWay/10)-(-randomLengthWay/10)))))/20;
           float randomAngle = randomAngleWay + (-randomAngleWay/10) + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/((randomAngleWay/10)-(-randomAngleWay/10))));
 
           node_Ref+=1;
