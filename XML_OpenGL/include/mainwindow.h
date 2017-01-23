@@ -1,31 +1,27 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_H_
+#define MAINWINDOW_H_
 
 #include <QMainWindow>
-#include <GLwindow.h>
+#include <GLWindow.h>
 
-namespace Ui {
-  class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
-  explicit MainWindow(QWidget *parent = 0);
-  ~MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private:
-  Ui::MainWindow *ui;
-  GLWindow *m_gl;
-  QString *m_fileName;
-  void keyPressEvent(QKeyEvent *_event);
-  int test=0;
-
-
-public slots:
-  void receiverthingy() { test=1; }
+    Ui::MainWindow *ui;
+    GLWindow *m_gl;
+    QString *m_fileName;
+    void keyPressEvent(QKeyEvent *_event);
 };
 
-#endif // MAINWINDOW_H
+#endif // _MAINWINDOW_H_

@@ -1,15 +1,15 @@
-#ifndef XMLPARSER_H__
-#define XMLPARSER_H__
+#ifndef XMLPARSER_H_
+#define XMLPARSER_H_
 
 #include <fstream>
 #include <string>
 #include <map>
-#include "iostream"
+#include <iostream>
 #include <boost/tokenizer.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 
-//node data
+//individual node data
 struct node
 {
     int nodeRef = 0;
@@ -25,53 +25,53 @@ struct node
     std::map<uint, node *> next;
 };
 
-//way data
+//road segment data - contains nodes
 struct way
 {
-  uint wayRef = 0;
-  uint64_t wayID;
-  //storing all the node reference that are inside the way
-  std::vector<node> nodesInWay;
-  std::vector<node> intersections;
-  std::string name;
+    uint wayRef = 0;
+    uint64_t wayID;
+    //storing all the node reference that are inside the way
+    std::vector<node> nodesInWay;
+    std::vector<node> intersections;
+    std::string name;
 };
 
+//ability to store original road network and extended network
 class network
 {
 public :
 
-  network();
+    network();
+    ~network();
 
-  ~network();
-
-  std::vector<node> nodes;
-  std::vector<way> ways;
-  node currentNode;
-  way currentWay;
+    std::vector<node> nodes;
+    std::vector<way> ways;
+    node currentNode;
+    way currentWay;
 };
 
 class XMLParse
 {
 public :
+    XMLParse();
+    ~XMLParse();
 
-  XMLParse();
+    //original OpenStreetMap network
+    network Network;
+    //extended road network
+    network NewNetwork;
 
-  ~XMLParse();
+    typedef boost::tokenizer<boost::char_separator<char> >tokenizer;
 
-  network Network;
-  network NewNetwork;
+    //functions
+    void parseXML( const std::string &_filename);
+    void checkIntersections();
+    void unfinishedNodes();
 
-  typedef boost::tokenizer<boost::char_separator<char> >tokenizer;
-
-  void parseXML( const std::string &_filename);
-  void checkIntersections();
-  void unfinishedNodes();
-
-  uint nodeRef = 0;
-  uint wayRef = 0;
-  float minLat, minLon, maxLat, maxLon;
+    //variables
+    uint m_nodeRef = 0;
+    uint m_wayRef = 0;
+    float m_minLat, m_minLon, m_maxLat, m_maxLon;
 };
 
-
-
-#endif
+#endif //_XMLPARSER_H_

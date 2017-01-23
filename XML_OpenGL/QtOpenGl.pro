@@ -10,14 +10,14 @@ INCLUDEPATH+=./include \
             /usr/local/include
 
 SOURCES+=$$PWD/src/main.cpp \
-         $$PWD/src/GLwindow.cpp \
+         $$PWD/src/GLWindow.cpp \
          $$PWD/src/XMLParser.cpp \
-         $$PWD/src/mainwindow.cpp \
+         $$PWD/src/MainWindow.cpp \
          $$PWD/src/OBJWrite.cpp
 
-HEADERS+=$$PWD/include/GLwindow.h \
+HEADERS+=$$PWD/include/GLWindow.h \
          $$PWD/include/XMLParser.h \
-         $$PWD/include/mainwindow.h \
+         $$PWD/include/MainWindow.h \
          $$PWD/include/OBJWrite.h
 
 FORMS    += $$PWD/UI/mainwindow.ui
@@ -31,18 +31,10 @@ macx:LIBS+= -framework OpenGL
 linux: LIBS+= -lGLU
 
 OTHER_FILES += data/map.osm \
-               data/map_1.osm \
                data/bigmap.osm \
-               data/biggermap.osm \
-               data/NYmap.osm \
-               data/SoL.osm \
-               data/venice \
                data/EastEnders.osm \
-               data/EastEnders_2.osm \
-               data/crazy_0 \
                data/NY \
-               data/sydney_0 \
                data/HK \
-               data/cardiff \
+               data/cardiff.osm \
                data/Philland \
                data/singleRoad_2.osm
