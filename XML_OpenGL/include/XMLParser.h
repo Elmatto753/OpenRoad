@@ -20,15 +20,15 @@ struct node
     bool inNewNetwork = false;
     //set any outlying nodes to unfinished (only the node at the end or beginning of the way)
     bool isUnfinished = false;
-    uint numIntersections = 0;
+    unsigned int numIntersections = 0;
     std::vector<std::string> intersectsWith;
-    std::map<uint, node *> next;
+    std::map<unsigned int, node *> next;
 };
 
 //road segment data - contains nodes
 struct way
 {
-    uint wayRef = 0;
+    unsigned int wayRef = 0;
     uint64_t wayID;
     //storing all the node reference that are inside the way
     std::vector<node> nodesInWay;
@@ -69,8 +69,8 @@ public :
     void unfinishedNodes();
 
     //variables
-    uint m_nodeRef = 0;
-    uint m_wayRef = 0;
+    unsigned int m_nodeRef = 0;
+    unsigned int m_wayRef = 0;
     float m_minLat, m_minLon, m_maxLat, m_maxLon;
 };
 

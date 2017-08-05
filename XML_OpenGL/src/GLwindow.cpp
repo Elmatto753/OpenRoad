@@ -52,10 +52,10 @@ void GLWindow::OBJfill(network _Network)
 
     Writer.clearOBJ();
 
-    for( uint i = 0; i<_Network.ways.size(); i++)
+    for( unsigned int i = 0; i<_Network.ways.size(); i++)
     {
         m_verticeCountWay=1;
-        for(uint j = 1; j<_Network.ways[i].nodesInWay.size(); j++)
+        for(unsigned int j = 1; j<_Network.ways[i].nodesInWay.size(); j++)
         {
             nodeCount+=1;
             //only if theres enough nodes in a way to make a face, need two original nodes
@@ -331,9 +331,9 @@ void GLWindow::drawNodes(network _Network)
 
     glPointSize(3.0f);
 
-    for( uint i = 0; i<_Network.ways.size(); i++)
+    for( unsigned int i = 0; i<_Network.ways.size(); i++)
     {
-        for(uint j = 1; j<_Network.ways[i].nodesInWay.size(); j++)
+        for(unsigned int j = 1; j<_Network.ways[i].nodesInWay.size(); j++)
         {
             m_X0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLat-Parser.m_minLat)/m_latInterval) * 100;
             m_Y0 = ((_Network.nodes[_Network.ways[i].nodesInWay[j - 1].nodeRef].nodeLon-Parser.m_minLon)/m_lonInterval) * 100;
@@ -357,10 +357,10 @@ void GLWindow::drawNodes(network _Network)
 //first function when extending network, must first analyse existing data
 void GLWindow::analyseNetwork(network Network)
 {
-    uint totIntersections = 0;
-    uint maxIntersections = 0;
-    uint angleCount = 0;
-    uint distCount = 0;
+    unsigned int totIntersections = 0;
+    unsigned int maxIntersections = 0;
+    unsigned int angleCount = 0;
+    unsigned int distCount = 0;
     float totAngle = 0.0f;
     float distance=0.0f;
     m_maxAngle = 0.0f;
@@ -368,7 +368,7 @@ void GLWindow::analyseNetwork(network Network)
     m_minDistance = 1.0f;
     m_maxDistance = 0.0f;
 
-    for(uint i = 0; i < Network.ways.size(); i++)
+    for(unsigned int i = 0; i < Network.ways.size(); i++)
     {
         if(Network.ways[i].intersections.size() > maxIntersections)
         {
@@ -377,7 +377,7 @@ void GLWindow::analyseNetwork(network Network)
         totIntersections += Network.ways[i].intersections.size();
 
         // calculating angle change between nodes
-        for(uint j = 1; j < Network.ways[i].nodesInWay.size() - 1; j++)
+        for(unsigned int j = 1; j < Network.ways[i].nodesInWay.size() - 1; j++)
         {
             float magToPrev = sqrt((Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat)*(Network.ways[i].nodesInWay[j].nodeLat - Network.ways[i].nodesInWay[j-1].nodeLat) +
                                    (Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon)*(Network.ways[i].nodesInWay[j].nodeLon - Network.ways[i].nodesInWay[j-1].nodeLon));
@@ -427,18 +427,18 @@ void GLWindow::analyseNetwork(network Network)
 void GLWindow::extendNetwork()
 {
     srand (time (NULL));
-    uint node_Ref = Parser.Network.nodes.size();
-    uint way_Ref;
-    uint numberOfNodes;
+    unsigned int node_Ref = Parser.Network.nodes.size();
+    unsigned int way_Ref;
+    unsigned int numberOfNodes;
     //keep track of how many nodes and intersection points already used
-    uint nodesInWay;
-    uint interInWay;
+    unsigned int nodesInWay;
+    unsigned int interInWay;
     bool intersectPoint=false;
 
     //start checking for an unfinished node
-    for( uint i = 0; i<Parser.NewNetwork.ways.size(); i++)
+    for( unsigned int i = 0; i<Parser.NewNetwork.ways.size(); i++)
     {
-        for(uint j = 1; j<Parser.NewNetwork.ways[i].nodesInWay.size(); j++)
+        for(unsigned int j = 1; j<Parser.NewNetwork.ways[i].nodesInWay.size(); j++)
         {
             //need to be editing the latest way added, so this should always update itself when a way is pushed back
             way_Ref=Parser.NewNetwork.ways.size();
@@ -454,13 +454,13 @@ void GLWindow::extendNetwork()
                 Parser.NewNetwork.ways.push_back(emptyWay);
 
                 std::mt19937 rng(time(NULL));
-                std::uniform_int_distribution<uint> gen(3, 14);
-                uint randomNodes = gen(rng);
-                std::uniform_int_distribution<uint> gen2(2, 5);
-                uint randomIntersection = gen2(rng);
+                std::uniform_int_distribution<unsigned int> gen(3, 14);
+                unsigned int randomNodes = gen(rng);
+                std::uniform_int_distribution<unsigned int> gen2(2, 5);
+                unsigned int randomIntersection = gen2(rng);
 
                 numberOfNodes=m_avgNodes+randomNodes;
-                uint numberOfIntersections=m_avgIntersections+randomIntersection;
+                unsigned int numberOfIntersections=m_avgIntersections+randomIntersection;
 
                 //calculating length for each node, clamped to max and min of original network
                 std::uniform_real_distribution<float> genLength(m_minDistance, m_maxDistance);
@@ -485,7 +485,7 @@ void GLWindow::extendNetwork()
                 }
 
                 //push back nodes one at a time then for each node (loop through the number of nodes in this new way)
-                for(uint k=0; k<numberOfNodes; k++)
+                for(unsigned int k=0; k<numberOfNodes; k++)
                 {
                     node emptyNode;
                     Parser.NewNetwork.ways[way_Ref].nodesInWay.push_back(emptyNode);

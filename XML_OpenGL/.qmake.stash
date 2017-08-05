@@ -11,3 +11,35 @@ QMAKE_DEFAULT_LIBDIRS = \
     /lib64 \
     /usr/lib \
     /lib
+QMAKE_CXX.INCDIRS = \
+    /usr/include/c++/4.8.5 \
+    /usr/include/c++/4.8.5/x86_64-redhat-linux \
+    /usr/include/c++/4.8.5/backward \
+    /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include \
+    /usr/local/include \
+    /usr/include \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/i686-w64-mingw32/include \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/i686-w64-mingw32/include/c++ \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward
+QMAKE_CXX.LIBDIRS = \
+    /usr/lib/gcc/x86_64-redhat-linux/4.8.5 \
+    /usr/lib64 \
+    /lib64 \
+    /usr/lib \
+    /lib \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0 \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/lib/gcc \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/i686-w64-mingw32/lib \
+    D:/InstalledPrograms/Qt/Tools/mingw530_32/lib
+QMAKE_CXX.QT_COMPILER_STDCXX = 199711L
+QMAKE_CXX.QMAKE_GCC_MAJOR_VERSION = 5
+QMAKE_CXX.QMAKE_GCC_MINOR_VERSION = 3
+QMAKE_CXX.QMAKE_GCC_PATCH_VERSION = 0
+QMAKE_CXX.COMPILER_MACROS = \
+    QT_COMPILER_STDCXX \
+    QMAKE_GCC_MAJOR_VERSION \
+    QMAKE_GCC_MINOR_VERSION \
+    QMAKE_GCC_PATCH_VERSION

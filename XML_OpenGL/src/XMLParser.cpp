@@ -45,8 +45,8 @@ void XMLParse::parseXML(const std::string &_filename)
     std::string lineBuffer;
     bool inWay = false;
     bool storeWay = false;
-    uint lineNum = 0;
-    uint errLineNum = 0;
+    unsigned int lineNum = 0;
+    unsigned int errLineNum = 0;
 
     while( !fileIn.eof() )
     {
@@ -138,7 +138,7 @@ void XMLParse::parseXML(const std::string &_filename)
                     uint64_t temp;
                     ss << *++tok_iter;
                     ss >> temp;
-                    for(uint i = 0; i < m_nodeRef; i++)
+                    for(unsigned int i = 0; i < m_nodeRef; i++)
                     {
                         if(Network.nodes[i].nodeID == temp)
                         {
@@ -171,7 +171,7 @@ void XMLParse::parseXML(const std::string &_filename)
                     inWay = false;
                     if( storeWay == true )
                     {
-                        uint j;
+                        unsigned int j;
                         Network.currentWay.wayRef = m_wayRef;
                         NewNetwork.currentWay.wayRef = m_wayRef;
                         // Building out a map of "next" nodes for each node in a way
@@ -211,7 +211,7 @@ void XMLParse::parseXML(const std::string &_filename)
 //check for unfinished nodes
 void XMLParse::unfinishedNodes()
 {
-    for(uint i = 0; i<Network.ways.size(); i++)
+    for(unsigned int i = 0; i<Network.ways.size(); i++)
     {
         //only need to check first and last of a node, dont want to set all the nodes in between to unfinished
         if(Network.ways[i].nodesInWay[0].nodeLat>m_maxLat||Network.ways[i].nodesInWay[0].nodeLat<m_minLat||
@@ -234,11 +234,11 @@ void XMLParse::unfinishedNodes()
 //store any node which current node intersects with, needed for geometry building
 void XMLParse::checkIntersections()
 {
-    for(uint i = 0; i<Network.ways.size(); i++)
+    for(unsigned int i = 0; i<Network.ways.size(); i++)
     {
-        for(uint j = 0; j<Network.ways[i].nodesInWay.size(); j++)
+        for(unsigned int j = 0; j<Network.ways[i].nodesInWay.size(); j++)
         {
-            for(uint k = 0; k<Network.ways.size(); k++)
+            for(unsigned int k = 0; k<Network.ways.size(); k++)
             {
                 if(i == k)
                 {
@@ -246,7 +246,7 @@ void XMLParse::checkIntersections()
                 }
                 else
                 {
-                    for(uint l = 0; l<Network.ways[k].nodesInWay.size(); l++)
+                    for(unsigned int l = 0; l<Network.ways[k].nodesInWay.size(); l++)
                     {
                         if(Network.ways[i].nodesInWay[j].nodeID == Network.ways[k].nodesInWay[l].nodeID && Network.ways[i].nodesInWay[j].nodeRef != int(Network.nodes.size()))
                         {

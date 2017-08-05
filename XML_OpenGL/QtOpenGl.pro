@@ -8,6 +8,11 @@ QT+= opengl core gui
 
 INCLUDEPATH+=./include \
             /usr/local/include
+win32{
+INCLUDEPATH+= "D:\InstalledPrograms\boost_1_64_0"
+LIBS += -lOpengl32 -lGLU32
+}
+
 
 SOURCES+=$$PWD/src/main.cpp \
          $$PWD/src/GLWindow.cpp \
